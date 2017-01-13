@@ -1,5 +1,5 @@
 # MDUtils
-A tool which can transfer markdown to html
+A tool which can transfer markdown to HTML.
 
 ## How to use?
 ```
