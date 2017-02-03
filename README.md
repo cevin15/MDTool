@@ -1,4 +1,4 @@
-# MDUtils
+# MDTool
 A tool which can transfer markdown to HTML.
 
 ## How to use?
