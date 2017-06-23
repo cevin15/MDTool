@@ -2,22 +2,15 @@ package com.youbenzi.testcase;
 
 import java.io.File;
 
+import com.youbenzi.mdtool.tool.MDTool;
+
 
 public class Test {
 
 	@org.junit.Test
 	public void test() {
-		String fileName = Test.class.getResource("/").getFile();
-		System.out.println(fileName);
-		File file = new File(fileName.substring(0, fileName.length() - "MDTool/build/classes/main/".length()) + "tmp_1");
-		System.out.println(file.exists());
-		file.mkdir();
-		System.out.println(file.exists());
-		System.out.println(file.getPath());
-		System.out.println("end");
+		String result = MDTool.markdown2Html(new File(Test.class.getResource("/file.md").getFile()));
+		System.out.println(result);
 	}
 	
-	public static void main(String[] args) {
-		new Test().test();
-	}
 }
