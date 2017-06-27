@@ -67,8 +67,8 @@ public class ValuePart{
 
 	/**
 	 * 还原value中的特殊符号占位符
-	 * @param value
-	 * @return
+	 * @param value 操作对象
+	 * @return 还原结果
 	 */
 	public String revertValue(String value) {
 

@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 
+group = 'com.youbenzi'
 sourceCompatibility = 1.7
 version = '1.0'
 jar {
@@ -20,16 +22,4 @@ dependencies {
 
 compileJava { 
 	options.encoding = "UTF-8" 
-}
-
-//控制台面板程序
-task Test(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-
-    main = 'com.youbenzi.mdtool.tool.Test'
-
-    standardInput = System.in   // 设置search task的标准输入为用户输入。否则用户输入gradle会无法正常获取
-    // arguments to pass to the application
-    // args '参数1'
-    // args '参数2'
 }

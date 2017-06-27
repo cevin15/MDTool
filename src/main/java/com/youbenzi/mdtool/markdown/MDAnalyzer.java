@@ -141,7 +141,7 @@ public class MDAnalyzer {
 	
 	/**
 	 * 筛选表格
-	 * @param reader
+	 * @param reader 缓存的数据
 	 * @return 按文本顺序排列的文本或者表格的列表
 	 */
 	public static List<TextOrTable> tableFilter(BufferedReader reader){
@@ -251,8 +251,6 @@ public class MDAnalyzer {
 	
 	/**
 	 * 删除表格数据中的头尾空白列
-	 * @param tableDataList
-	 * @return
 	 */
 	private static List<List<String>> trimTableData(List<List<String>> tableDataList){
 		boolean isFirstEmpty = true;
@@ -296,7 +294,7 @@ public class MDAnalyzer {
 	/**
 	 * 对一行文本进行语法分析，主要针对加粗，斜体等能在句中使用的格式
 	 * @param text 一行文本
-	 * @return
+	 * @return 分析结果
 	 */
 	public static List<ValuePart> analyzeTextLine(String text){
 		text = text.trim();
@@ -308,7 +306,6 @@ public class MDAnalyzer {
 	 * @param text 一行文本
 	 * @param notCheckMDTokens 已经检查过的md语法
 	 * @param currentTypes	当前文本已有的语法
-	 * @return
 	 */
 	public static List<ValuePart> analyzeTextLine(String text, List<String> notCheckMDTokens, List<String> currentTypes){
 		List<ValuePart> result = new ArrayList<ValuePart>();
