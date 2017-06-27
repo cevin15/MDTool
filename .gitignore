@@ -3,6 +3,7 @@
 # Package Files #
 *.war
 *.ear
+deploy.sh
 .classpath
 .project
 .DS_Store
@@ -14,5 +15,6 @@ work/
 image/
 work/
 tmp/
-/bin/
+bin/
 build/
+target/
