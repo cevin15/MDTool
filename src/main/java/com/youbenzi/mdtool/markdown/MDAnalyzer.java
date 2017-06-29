@@ -306,6 +306,7 @@ public class MDAnalyzer {
 	 * @param text 一行文本
 	 * @param notCheckMDTokens 已经检查过的md语法
 	 * @param currentTypes	当前文本已有的语法
+	 * @return 分析结果
 	 */
 	public static List<ValuePart> analyzeTextLine(String text, List<String> notCheckMDTokens, List<String> currentTypes){
 		List<ValuePart> result = new ArrayList<ValuePart>();
