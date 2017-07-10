@@ -2,7 +2,7 @@
 A tool which can transfer markdown to HTML.
 
 ## How it works?
-``` 
+```xml
 ## Maven
 <dependency>
     <groupId>com.youbenzi</groupId>
@@ -10,11 +10,11 @@ A tool which can transfer markdown to HTML.
     <version>1.0.1</version>
 </dependency>
 ```
-```
+```java
 MDTool.markdown2Html(new File(markdown_file_path));
 ```
 or 
-```
+```java
 MDTool.markdown2Html(markdown_content);
 ```
 
