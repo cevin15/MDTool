@@ -8,30 +8,22 @@ import java.io.StringReader;
 import java.util.List;
 
 import com.youbenzi.mdtool.export.HTMLDecorator;
+import com.youbenzi.mdtool.markdown.Analyzer;
 import com.youbenzi.mdtool.markdown.Block;
-import com.youbenzi.mdtool.markdown.MDAnalyzer;
 
 public class MDTool {
 
 	public static String markdown2Html(File file){
-		BufferedReader reader = null;
-		String lineStr = null;
-		try {
-			reader = new BufferedReader(new FileReader(file));StringBuffer sb = new StringBuffer();
+		try (BufferedReader reader = new BufferedReader(new FileReader(file));){
+			String lineStr = null;
+			
+			StringBuffer sb = new StringBuffer();
 			while ((lineStr = reader.readLine())!=null) {
 				sb.append(lineStr).append("\n");
 			}
 			return markdown2Html(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if(reader!=null){
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return null;
 	}
@@ -40,14 +32,18 @@ public class MDTool {
 		if(mdStr==null){
 			return null;
 		}
-		BufferedReader reader = new BufferedReader(new StringReader(mdStr));
-		List<Block> list = MDAnalyzer.analyze(reader);
 		
-		HTMLDecorator decorator = new HTMLDecorator(); 
+		try (BufferedReader reader = new BufferedReader(new StringReader(mdStr));) {
+			List<Block> list = Analyzer.analyze(reader);
+			HTMLDecorator decorator = new HTMLDecorator(); 
+			
+			decorator.decorate(list);
+			return decorator.outputHtml();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		decorator.decorate(list);
-		
-		return decorator.outputHtml();
+		return null;
 	}
 	
 	public static void main(String[] args) {

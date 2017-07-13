@@ -7,12 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.youbenzi.mdtool.markdown.Analyzer;
 import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
-import com.youbenzi.mdtool.markdown.MDAnalyzer;
 import com.youbenzi.mdtool.markdown.MDToken;
 import com.youbenzi.mdtool.markdown.ValuePart;
 
+/**
+ * 列表（有序列表，无序列表，引用）builder
+ * @author yangyingqiang
+ * @time 2017年7月11日 下午6:38:05
+ */
 public class MultiListBuilder implements BlockBuilder{
 
 	private String content;
@@ -21,6 +26,11 @@ public class MultiListBuilder implements BlockBuilder{
 		this.content = content;
 	}
 	
+	/**
+	 * 找出当前行的缩进空格数
+	 * @param line
+	 * @return
+	 */
 	private String blankStrInHead(String line) {
 		if(line == null) {
 			return "";
@@ -90,7 +100,7 @@ public class MultiListBuilder implements BlockBuilder{
 		return false;
 	}
 	
-	public String buildListBlock(Block result, String value, BufferedReader br, List<TypeAndBlank> typeAndBlanks) throws IOException {
+	private String buildListBlock(Block result, String value, BufferedReader br, List<TypeAndBlank> typeAndBlanks) throws IOException {
 
 		String firstBlankStr = blankStrInHead(value);
 		BlockType firstCurrentType = listType(value);
@@ -105,13 +115,14 @@ public class MultiListBuilder implements BlockBuilder{
 				return value;
 			}
 			Block block = new Block();
-			value = value.substring(firstBlankStr.length());
+			value = value.substring(firstBlankStr.length());	//删除缩进空格
+			
 			int index = computeCharIndex(value, blockType);
 			if(index<0){
 				value = br.readLine();
 				continue;
 			}
-			value = value.substring(index+1).trim();
+			value = value.substring(index+1).trim();	//取出当前行取出列表符之后的真正数据
 			
 			if(value.equals("")){	//空行直接忽略
 				value = br.readLine();
@@ -125,7 +136,7 @@ public class MultiListBuilder implements BlockBuilder{
 				value = value.substring(i+1).trim();
 			}
 			
-			List<ValuePart> list = MDAnalyzer.analyzeTextLine(value);
+			List<ValuePart> list = Analyzer.analyzeTextLine(value);
 			if(i>0){
 				for (ValuePart valuePart : list) {
 					valuePart.addType(BlockType.HEADLINE);

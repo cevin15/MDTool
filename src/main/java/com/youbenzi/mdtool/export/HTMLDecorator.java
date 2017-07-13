@@ -85,7 +85,7 @@ public class HTMLDecorator implements Decorator{
 		StringBuilder tmp = new StringBuilder("<pre><code>\n");
 		value = value.replaceAll("<", "&lt;");
 		value = value.replaceAll(">", "&gt;");
-		tmp.append(value).append("\n");
+		tmp.append(value);
 		tmp.append("</code></pre>\n");
 		
 		return tmp.toString();
@@ -244,7 +244,7 @@ public class HTMLDecorator implements Decorator{
 		if(valueParts==null){
 			return tmp.toString();
 		}
-		tmp.append("<"+tag+">\n");
+		tmp.append("<"+tag+">");
 		for (ValuePart valuePart : valueParts) {
 			BlockType[] types = valuePart.getTypes();
 			
@@ -257,10 +257,10 @@ public class HTMLDecorator implements Decorator{
 					value = formatByType(type, value, valuePart);
 				}
 			}
-			tmp.append(value).append("\n");
+			tmp.append(value);
 		}
 		tmp.append(lineHelper.subList());
-		tmp.append("</"+tag+">\n");
+		tmp.append("</"+tag+">");
 		return tmp.toString();
 	}
 	
