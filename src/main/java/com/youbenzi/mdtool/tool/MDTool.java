@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
 import com.youbenzi.mdtool.export.HTMLDecorator;
@@ -33,17 +32,11 @@ public class MDTool {
 			return null;
 		}
 		
-		try (BufferedReader reader = new BufferedReader(new StringReader(mdStr));) {
-			List<Block> list = Analyzer.analyze(reader);
-			HTMLDecorator decorator = new HTMLDecorator(); 
-			
-			decorator.decorate(list);
-			return decorator.outputHtml();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		List<Block> list = Analyzer.analyze(mdStr);
+		HTMLDecorator decorator = new HTMLDecorator(); 
 		
-		return null;
+		decorator.decorate(list);
+		return decorator.outputHtml();
 	}
 	
 	public static void main(String[] args) {
