@@ -3,7 +3,6 @@ package com.youbenzi.mdtool.markdown.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.TextOrBlock;
 import com.youbenzi.mdtool.markdown.builder.HeaderBuilder;
 
@@ -24,22 +23,29 @@ public class HeaderNextLineFilter extends SyntaxFilter{
 	@Override
 	public List<TextOrBlock> invoke(List<String> lines) {
 		List<TextOrBlock> textOrBlocks = new ArrayList<>();
+		StringBuilder outerText = new StringBuilder();
 		for (int idx = 0, si = lines.size(); idx < si; idx++) {
 			String str = lines.get(idx);
-			Block block = null;
 			if ((idx + 1) < si) {
 				String nextStr = lines.get(idx + 1);
 				int lvl = HeaderBuilder.isRightType(nextStr);
 				if (lvl > 0) {
-					block = new HeaderBuilder(str).bulid(lvl);
+					if (!outerText.toString().equals("")) {
+						textOrBlocks.add(new TextOrBlock(outerText.toString()));
+						outerText = new StringBuilder();
+					}
+					textOrBlocks.add(new TextOrBlock(new HeaderBuilder(str).bulid(lvl)));
 					idx++;
+				} else {
+					outerText.append(str).append("\n");
 				}
-			} 
-			if(block == null) {
-				textOrBlocks.add(new TextOrBlock(str));
 			} else {
-				textOrBlocks.add(new TextOrBlock(block));
+				outerText.append(str).append("\n");
 			}
+		}
+		
+		if (!outerText.toString().equals("")) {
+			textOrBlocks.add(new TextOrBlock(outerText.toString()));
 		}
 		return textOrBlocks;
 	}

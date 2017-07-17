@@ -18,6 +18,7 @@ public class MDToken {
 	public static String ITALIC_WORD_2 = "*";
 	public static String STRIKE_WORD = "~~";
 	public static String CODE_WORD = "`";
+	public static String ROW = "  ";
 	
 	public static Map<String, String> PLACEHOLDER_MAP = new LinkedHashMap<String, String>() {	//需要显示的特殊符号的占位符
 		private static final long serialVersionUID = 5649442662460683378L;
@@ -53,6 +54,8 @@ public class MDToken {
 			return BlockType.CODE_WORD;
 		}else if(mdToken.equals(LINK)){
 			return BlockType.LINK;
+		}else if(mdToken.equals(ROW)){
+			return BlockType.ROW;
 		}else {
 			return BlockType.NONE;
 		}

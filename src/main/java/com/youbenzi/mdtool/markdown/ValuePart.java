@@ -24,7 +24,6 @@ public class ValuePart{
 	}
 	
 	public String getValue() {
-		
 		return value;
 	}
 	public void setValue(String value) {
@@ -70,11 +69,23 @@ public class ValuePart{
 	 * @param value 操作对象
 	 * @return 还原结果
 	 */
-	public String revertValue(String value) {
+	public static String revertValue(String value) {
 
 		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
 			String tmpValue = entry.getKey().substring(1);	//需要去除第一个反斜杠
 			value = value.replace(entry.getValue(), tmpValue);
+		}
+		return value;
+	}
+	
+	/**
+	 * 把需要显示的特殊符号转换为占位符
+	 * @param value 操作对象
+	 * @return 转换结果
+	 */
+	public static String convertValue(String value) {
+		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
+			value = value.replace(entry.getKey(), entry.getValue());
 		}
 		return value;
 	}

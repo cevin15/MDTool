@@ -36,4 +36,9 @@ public class TextOrBlock {
 	public void setBlock(Block block) {
 		this.block = block;
 	}
+	
+	@Override
+	public String toString() {
+		return isBlock?text:block.toString();
+	}
 }

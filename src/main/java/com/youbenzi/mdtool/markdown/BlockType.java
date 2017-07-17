@@ -12,6 +12,7 @@ public enum BlockType {
 	UNORDERED_LIST,
 	// 行
 	HEADLINE,
+	ROW,
 	// 块修饰
 	NONE,
 	IMG,

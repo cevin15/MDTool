@@ -35,12 +35,6 @@ public class HTMLDecorator implements Decorator{
 				case TABLE:
 					str = tableParagraph(block.getTableData());
 					break;
-				case UNORDERED_LIST:
-					str = unorderedListParagraph(block.getListData());
-					break;
-				case ORDERED_LIST:
-					str = orderedListParagraph(block.getListData());
-					break;
 				case LIST:
 					str = listParagraph(block.getListData());
 					break;
@@ -153,6 +147,8 @@ public class HTMLDecorator implements Decorator{
 			case IMG:
 				return "<img src=\"" + valuePart.getUrl() + "\" title=\"" 
 					+ valuePart.getTitle() + "\" alt=\""+ valuePart.getTitle() +"\" />";
+			case ROW:
+				return "<br/>";
 			default:
 				return value;
 		}
@@ -258,9 +254,10 @@ public class HTMLDecorator implements Decorator{
 				}
 			}
 			tmp.append(value);
+			
 		}
 		tmp.append(lineHelper.subList());
-		tmp.append("</"+tag+">");
+		tmp.append("</"+tag+">\n");
 		return tmp.toString();
 	}
 	

@@ -3,7 +3,6 @@ package com.youbenzi.mdtool.markdown;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.youbenzi.mdtool.markdown.filter.CodeListFilter;
 import com.youbenzi.mdtool.markdown.filter.CodePartFilter;
@@ -41,10 +40,14 @@ public class Analyzer {
 	 * @return 分析结果
 	 */
 	public static List<ValuePart> analyzeTextLine(String text) {
-		text = text.trim();
-		return analyzeTextLine(text, new ArrayList<String>(), new ArrayList<String>());
+		List<ValuePart> result = analyzeTextLine(text.trim(), new ArrayList<String>(), new ArrayList<String>());
+		if(text.endsWith(MDToken.ROW)) {
+			result.add(createValuePart("", Arrays.asList(MDToken.ROW)));
+		}
+		return result;
 	}
 
+	
 	/**
 	 * 对一行文本进行语法分析，主要针对加粗，斜体等能在句中使用的格式
 	 * 
@@ -62,10 +65,6 @@ public class Analyzer {
 		if (text == null || text.length() < 0) {
 			return result;
 		}
-		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
-			text = text.replace(entry.getKey(), entry.getValue());
-		}
-
 		int i = text.length();
 		String mdToken = null;
 		for (String tmp : mdTokenInLine) { // 检查是否有指定的md语法
