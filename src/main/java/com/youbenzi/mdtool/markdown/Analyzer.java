@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.youbenzi.mdtool.markdown.TextLinePiece.PieceType;
 import com.youbenzi.mdtool.markdown.filter.CodeListFilter;
 import com.youbenzi.mdtool.markdown.filter.CodePartFilter;
 import com.youbenzi.mdtool.markdown.filter.HeaderNextLineFilter;
@@ -40,32 +41,28 @@ public class Analyzer {
 	 * @return 分析结果
 	 */
 	public static List<ValuePart> analyzeTextLine(String text) {
-		List<ValuePart> result = analyzeTextLine(text.trim(), new ArrayList<String>(), new ArrayList<String>());
+
+		List<ValuePart> result = text2ValuePart(text.trim(), new ArrayList<String>(), new ArrayList<String>());
+		
 		if(text.endsWith(MDToken.ROW)) {
 			result.add(createValuePart("", Arrays.asList(MDToken.ROW)));
 		}
 		return result;
 	}
-
 	
 	/**
-	 * 对一行文本进行语法分析，主要针对加粗，斜体等能在句中使用的格式
-	 * 
-	 * @param text
-	 *            一行文本
-	 * @param notCheckMDTokens
-	 *            已经检查过的md语法
-	 * @param currentTypes
-	 *            当前文本已有的语法
-	 * @return 分析结果
+	 * 将Text 转为 valuePart
+	 * @param text 文本内容
+	 * @param notCheckMDTokens 不需要检查的md token
+	 * @param currentTypes 当前文本已经包含的md token类型
+	 * @return valuePart 列表
 	 */
-	private static List<ValuePart> analyzeTextLine(String text, List<String> notCheckMDTokens,
+	private static List<ValuePart> text2ValuePart(String text, List<String> notCheckMDTokens,
 			List<String> currentTypes) {
 		List<ValuePart> result = new ArrayList<ValuePart>();
-		if (text == null || text.length() < 0) {
-			return result;
-		}
-		int i = text.length();
+		int textLength = text.length();
+		//1. 检索到第一个的md token。输出：位置i，语法：token
+		int i = textLength;
 		String mdToken = null;
 		for (String tmp : mdTokenInLine) { // 检查是否有指定的md语法
 			if (notCheckMDTokens.contains(tmp)) {
@@ -77,76 +74,104 @@ public class Analyzer {
 				mdToken = tmp;
 			}
 		}
-		if (mdToken != null) { // 有指定的md语法
-			LinkOrImageBeanTmp linkOrImageBeanTmp = null;
-			int j = -1;
-			if (mdToken.equals(MDToken.LINK) || mdToken.equals(MDToken.IMG)) {
-				linkOrImageBeanTmp = hasLinkOrImage(text, mdToken.equals(MDToken.LINK));
-				if (linkOrImageBeanTmp != null) {
-					j = linkOrImageBeanTmp.getEndIndex();
-				}
-			} else {
-				j = text.indexOf(mdToken, i + mdToken.length());
+		//2. 根据这个token检测语法是否完整
+		TextLinePiece piece = checkIfCorrectSyntax(i, mdToken, text);
+		//3. 对文本分为三块
+		int firstPartEndIndex = textLength;
+		int secondPartEndIndex = 0;
+		int thirdPartEndIndex = 0;
+		if(piece != null) {
+			firstPartEndIndex = piece.getBeginIndex();
+			secondPartEndIndex = piece.getEndIndex();
+			if(secondPartEndIndex < (textLength - 1)) {
+				thirdPartEndIndex = textLength;
 			}
-			if (j > -1) { // 该语法完整
-				if (i > 0) {
-					String v1 = text.substring(0, i);
-					ValuePart valuePart = createValuePart(v1, currentTypes);
-					result.add(valuePart);
+		}
+		//4. 对这个token块之前的内容归档
+		if(firstPartEndIndex > 0) {
+			ValuePart valuePart = createValuePart(text.substring(0, firstPartEndIndex), currentTypes);
+			result.add(valuePart);
+		}
+		//5. 对这个token块的内容进行递归分析
+		if(secondPartEndIndex > 0) {
+			List<String> currentTypesClone = cloneList(currentTypes);
+			List<String> notCheckMDTokensClone = cloneList(notCheckMDTokens);
+			notCheckMDTokensClone.add(mdToken);
+			currentTypesClone.add(mdToken);
+			ValuePart valuePart = null;
+			
+			switch (piece.getPieceType()) {
+			case LINK:
+				valuePart = analyzeTextInLink(piece.getTitle(), notCheckMDTokensClone, currentTypesClone);
+				String tmpValue = valuePart.getTitle() + "(" + piece.getUrl() + ")";
+				valuePart.setValue(tmpValue);
+				valuePart.setUrl(piece.getUrl());
+				result.add(valuePart);
+				break;
+			case IMAGE:
+				valuePart = createValuePart(piece.getUrl(), currentTypesClone);
+				valuePart.setTitle(piece.getTitle());
+				valuePart.setUrl(piece.getUrl());
+				result.add(valuePart);
+				break;
+			case COMMON:
+			default:
+				String sencondPart = text.substring(piece.getBeginIndex() + mdToken.length(), secondPartEndIndex);
+				List<ValuePart> tmpList2 = text2ValuePart(sencondPart, notCheckMDTokensClone, currentTypesClone);
+				for (ValuePart tmp : tmpList2) {
+					result.add(tmp);
 				}
-
-				notCheckMDTokens.add(mdToken);
-				currentTypes.add(mdToken);
-				if (linkOrImageBeanTmp != null) {
-					List<String> ct4Link = new ArrayList<String>();
-					for (String type : currentTypes) {
-						ct4Link.add(type);
-					}
-					ValuePart valuePart = null;
-					if (linkOrImageBeanTmp.isLink()) {
-						valuePart = analyzeTextInLink(linkOrImageBeanTmp.getTitle(), notCheckMDTokens, ct4Link);
-						String tmpValue = valuePart.getTitle() + "(" + linkOrImageBeanTmp.getUrl() + ")";
-						valuePart.setValue(tmpValue);
-					} else {
-						valuePart = createValuePart(linkOrImageBeanTmp.getUrl(), ct4Link);
-						valuePart.setTitle(linkOrImageBeanTmp.getTitle());
-					}
-					valuePart.setUrl(linkOrImageBeanTmp.getUrl());
-					result.add(valuePart);
-				} else {
-					String v2 = text.substring(i + mdToken.length(), j);
-					List<ValuePart> tmpList2 = analyzeTextLine(v2, notCheckMDTokens, currentTypes);
-					for (ValuePart valuePart : tmpList2) {
-						result.add(valuePart);
-					}
-				}
-				String v3 = "";
-				if (mdToken.equals(MDToken.IMG)) { // image的开始符是两个字符，结束符是一个字符，所以要特殊处理
-					v3 = text.substring(j + 1);
-				} else { // 其它标签的开始符跟结束符长度一致
-					v3 = text.substring(j + mdToken.length());
-				}
-
-				notCheckMDTokens.remove(notCheckMDTokens.size() - 1);
-				currentTypes.remove(currentTypes.size() - 1);
-				List<ValuePart> tmpList1 = analyzeTextLine(v3, notCheckMDTokens, currentTypes);
-				for (ValuePart valuePart : tmpList1) {
-					result.add(valuePart);
-				}
-			} else { // 该语法不完整，没结束符
-				notCheckMDTokens.add(mdToken);
-				List<ValuePart> tmpList = analyzeTextLine(text, notCheckMDTokens, currentTypes);
-				for (ValuePart valuePart : tmpList) {
-					result.add(valuePart);
-				}
+				break;
 			}
-		} else { // 没有指定的md语法
-			if (text != null && text.length() > 0) {
-				ValuePart valuePart = createValuePart(text, currentTypes);
+		}
+		//6. 对这个token块之后对内容进行递归分析
+		if(thirdPartEndIndex > 0) {
+
+			String thirdPart = "";
+			if (piece.getPieceType() == PieceType.IMAGE) { // image的开始符是两个字符，结束符是一个字符，所以要特殊处理
+				thirdPart = text.substring(piece.getEndIndex() + 1);
+			} else { // 其它标签的开始符跟结束符长度一致
+				thirdPart = text.substring(piece.getEndIndex() + mdToken.length());
+			}
+
+			List<ValuePart> tmpList1 = text2ValuePart(thirdPart, notCheckMDTokens, currentTypes);
+			for (ValuePart valuePart : tmpList1) {
 				result.add(valuePart);
 			}
 		}
+		
 		return result;
+	}
+	
+	private static List<String> cloneList(List<String> target) {
+		List<String> result = new ArrayList<>();
+		for (String tmp : target) {
+			result.add(tmp);
+		}
+		return result;
+	}
+	
+	/**
+	 * 检查mdtoken 对应的语法是否完整
+	 * @param i 开始查找的位置
+	 * @param mdToken 查找的md token
+	 * @param text 被查找的文本
+	 * @return mdtoken对应的语法块，如果找不到，则返回null
+	 */
+	private static TextLinePiece checkIfCorrectSyntax(int i, String mdToken, String text) {
+		if(mdToken == null) {
+			return null;
+		}
+		TextLinePiece textLinePiece = null;
+		if (mdToken.equals(MDToken.LINK) || mdToken.equals(MDToken.IMG)) {
+			textLinePiece = hasLinkOrImage(text, mdToken.equals(MDToken.LINK));
+		} else {
+			int j = text.indexOf(mdToken, i + mdToken.length());
+			if(j > -1) {
+				textLinePiece = new TextLinePiece(i, j, PieceType.COMMON);
+			}
+		}
+		return textLinePiece;
 	}
 
 	private static ValuePart createValuePart(String value, List<String> mdTokens) {
@@ -164,10 +189,10 @@ public class Analyzer {
 
 		return valuePart;
 	}
-
-	private static LinkOrImageBeanTmp hasLinkOrImage(String str, boolean isLink) {
-		LinkOrImageBeanTmp linkOrImageBean = new LinkOrImageBeanTmp();
-		linkOrImageBean.setLink(isLink);
+	
+	private static TextLinePiece hasLinkOrImage(String str, boolean isLink) {
+		TextLinePiece linkOrImageBean = new TextLinePiece();
+		linkOrImageBean.setPieceType(isLink?PieceType.LINK:PieceType.IMAGE);
 		String token = null;
 		if (isLink) {
 			token = MDToken.LINK;

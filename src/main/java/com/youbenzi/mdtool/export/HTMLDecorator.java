@@ -9,6 +9,7 @@ import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
 import com.youbenzi.mdtool.markdown.ValuePart;
 import com.youbenzi.mdtool.tool.MDTool;
+import com.youbenzi.mdtool.tool.Tools;
 
 
 public class HTMLDecorator implements Decorator{
@@ -143,7 +144,7 @@ public class HTMLDecorator implements Decorator{
 			case HEADLINE:
 				return "<h"+valuePart.getLevel()+">"+value+"</h"+valuePart.getLevel()+">";
 			case LINK:
-				return "<a href=\""+valuePart.getUrl()+"\" title=\"" + value + "\">"+value+"</a>";
+				return "<a href=\""+valuePart.getUrl()+"\" title=\"" + Tools.filterHtml(value) + "\">"+value+"</a>";
 			case IMG:
 				return "<img src=\"" + valuePart.getUrl() + "\" title=\"" 
 					+ valuePart.getTitle() + "\" alt=\""+ valuePart.getTitle() +"\" />";

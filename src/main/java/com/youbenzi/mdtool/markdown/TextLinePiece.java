@@ -1,11 +1,22 @@
 package com.youbenzi.mdtool.markdown;
 
-public class LinkOrImageBeanTmp {
+public class TextLinePiece {
 	private int beginIndex;
 	private int endIndex;
 	private String title;
 	private String url;
-	private boolean isLink;
+	private PieceType pieceType;
+	
+	public TextLinePiece(int beginIndex, int endIndex, PieceType pieceType) {
+		super();
+		this.beginIndex = beginIndex;
+		this.endIndex = endIndex;
+		this.pieceType = pieceType;
+	}
+
+	public TextLinePiece() {
+		super();
+	}
 
 	public int getBeginIndex() {
 		return beginIndex;
@@ -39,11 +50,15 @@ public class LinkOrImageBeanTmp {
 		this.url = url;
 	}
 
-	public boolean isLink() {
-		return isLink;
+	public PieceType getPieceType() {
+		return pieceType;
 	}
 
-	public void setLink(boolean isLink) {
-		this.isLink = isLink;
+	public void setPieceType(PieceType pieceType) {
+		this.pieceType = pieceType;
+	}
+
+	public enum PieceType {
+		LINK, IMAGE, COMMON
 	}
 }
