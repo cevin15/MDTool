@@ -10,7 +10,7 @@ import com.youbenzi.mdtool.markdown.builder.TableBuilder;
 /**
  * 筛选出内容中的表格
  * @author yangyingqiang
- * @time 2017年7月14日 上午11:44:13
+ * 2017年7月14日 上午11:44:13
  */
 public class TablePartFilter extends SyntaxFilter{
 

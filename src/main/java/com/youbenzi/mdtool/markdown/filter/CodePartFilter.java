@@ -10,7 +10,7 @@ import com.youbenzi.mdtool.markdown.builder.CodeBuilder;
 /**
  * 筛选出内容中的代码块
  * @author yangyingqiang
- * @time 2017年7月14日 上午11:43:37
+ * 2017年7月14日 上午11:43:37
  */
 public class CodePartFilter extends SyntaxFilter{
 

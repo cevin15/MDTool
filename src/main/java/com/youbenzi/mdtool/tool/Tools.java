@@ -29,10 +29,7 @@ public class Tools {
 	
 	
     /**  
-     *   
-     * 基本功能：过滤所有以"<"开头以">"结尾的标签  
-     * <p>  
-     *   
+     * 基本功能：过滤所有HTML标签  
      * @param str  
      * @return String  
      */  

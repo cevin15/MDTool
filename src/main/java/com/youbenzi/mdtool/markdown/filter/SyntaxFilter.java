@@ -12,7 +12,7 @@ import com.youbenzi.mdtool.tool.Tools;
  * markdown语法过滤器
  * 
  * @author yangyingqiang
- * @time 2017年7月14日 上午11:38:51
+ * 2017年7月14日 上午11:38:51
  */
 public abstract class SyntaxFilter {
 

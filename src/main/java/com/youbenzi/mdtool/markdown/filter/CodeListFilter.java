@@ -7,7 +7,7 @@ import com.youbenzi.mdtool.markdown.builder.CodeBuilder;
 /**
  * 筛选出内容中的代码（四个空格格式）
  * @author yangyingqiang
- * @time 2017年7月14日 上午11:43:07
+ * 2017年7月14日 上午11:43:07
  */
 public class CodeListFilter extends ListFilter{
 

@@ -16,7 +16,7 @@ import com.youbenzi.mdtool.markdown.ValuePart;
 /**
  * 列表（有序列表，无序列表，引用）builder
  * @author yangyingqiang
- * @time 2017年7月11日 下午6:38:05
+ * 2017年7月11日 下午6:38:05
  */
 public class MultiListBuilder implements BlockBuilder{
 
@@ -136,7 +136,7 @@ public class MultiListBuilder implements BlockBuilder{
 				value = value.substring(i+1).trim();
 			}
 			
-			List<ValuePart> list = Analyzer.analyzeTextLine(value);
+			List<ValuePart> list = Analyzer.analyzeLineText(value);
 			if(i>0){
 				for (ValuePart valuePart : list) {
 					valuePart.addType(BlockType.HEADLINE);

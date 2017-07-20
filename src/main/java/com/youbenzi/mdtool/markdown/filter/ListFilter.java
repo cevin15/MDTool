@@ -10,7 +10,7 @@ import com.youbenzi.mdtool.markdown.builder.MultiListBuilder;
 /**
  * 筛选出内容中的列表
  * @author yangyingqiang
- * @time 2017年7月14日 下午4:43:35
+ * 2017年7月14日 下午4:43:35
  */
 public class ListFilter extends SyntaxFilter {
 
@@ -60,8 +60,8 @@ public class ListFilter extends SyntaxFilter {
 
 	/**
 	 * 是否是符合规则的列表
-	 * @param target
-	 * @return
+	 * @param target 检查目标
+	 * @return 布尔值
 	 */
 	protected boolean isListLine(String target) {
 		return MultiListBuilder.isList(target);
@@ -69,8 +69,8 @@ public class ListFilter extends SyntaxFilter {
 	
 	/**
 	 * 对内容进行无用字符截取
-	 * @param target
-	 * @return
+	 * @param target 截取目标
+	 * @return 结果
 	 */
 	protected String trim(String target) {
 		//do nothing
@@ -79,8 +79,8 @@ public class ListFilter extends SyntaxFilter {
 	
 	/**
 	 * 创建对应的block
-	 * @param source
-	 * @return
+	 * @param source 元数据
+	 * @return 创建结果
 	 */
 	protected Block buildBlock(String source) {
 		return new MultiListBuilder(source).bulid();
@@ -88,7 +88,7 @@ public class ListFilter extends SyntaxFilter {
 	
 	/**
 	 * 如果数据为空怎么处理
-	 * @param target
+	 * @param target 处理目标
 	 */
 	protected void how2AppendIfBlank(StringBuilder target) {
 		//do nothing

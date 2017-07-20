@@ -23,7 +23,7 @@ public class CommonTextBuilder implements BlockBuilder{
 		List<String> lines = Tools.read2List(content);
 		List<ValuePart> valueParts = new ArrayList<>();
 		for (String line : lines) {
-			valueParts.addAll(Analyzer.analyzeTextLine(line));
+			valueParts.addAll(Analyzer.analyzeLineText(line));
 		}
 		block.setValueParts(valueParts);
 		

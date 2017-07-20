@@ -12,7 +12,7 @@ import com.youbenzi.mdtool.markdown.builder.HeaderBuilder;
  * ### 标题
  * ）
  * @author yangyingqiang
- * @time 2017年7月14日 下午3:41:26
+ * 2017年7月14日 下午3:41:26
  */
 public class HeaderOneLineFilter extends SyntaxFilter{
 

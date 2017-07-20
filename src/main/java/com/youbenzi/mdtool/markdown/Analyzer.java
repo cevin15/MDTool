@@ -40,7 +40,7 @@ public class Analyzer {
 	 *            一行文本
 	 * @return 分析结果
 	 */
-	public static List<ValuePart> analyzeTextLine(String text) {
+	public static List<ValuePart> analyzeLineText(String text) {
 
 		List<ValuePart> result = text2ValuePart(text.trim(), new ArrayList<String>(), new ArrayList<String>());
 		
