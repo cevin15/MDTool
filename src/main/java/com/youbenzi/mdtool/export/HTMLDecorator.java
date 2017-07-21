@@ -77,11 +77,16 @@ public class HTMLDecorator implements Decorator{
 	private String codeParagraph(ValuePart[] valueParts){
 
 		String value = valueParts[0].getValue();
-		StringBuilder tmp = new StringBuilder("<pre><code>\n");
+		StringBuilder tmp = new StringBuilder("<pre>\n");
+		tmp.append("<code>");
 		value = value.replaceAll("<", "&lt;");
 		value = value.replaceAll(">", "&gt;");
+		if(value.endsWith("\n")) {
+			value = value.substring(0, value.length() - "\n".length());
+		}
 		tmp.append(value);
-		tmp.append("</code></pre>\n");
+		tmp.append("</code>\n");
+		tmp.append("</pre>\n");
 		
 		return tmp.toString();
 	}
