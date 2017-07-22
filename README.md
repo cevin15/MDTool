@@ -7,7 +7,7 @@ A tool which can transfer markdown to HTML.
 <dependency>
     <groupId>com.youbenzi</groupId>
     <artifactId>MDTool</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 ```java
