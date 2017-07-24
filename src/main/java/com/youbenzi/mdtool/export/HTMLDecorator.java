@@ -77,7 +77,7 @@ public class HTMLDecorator implements Decorator{
 	private String codeParagraph(ValuePart[] valueParts){
 
 		String value = valueParts[0].getValue();
-		StringBuilder tmp = new StringBuilder("<pre>\n");
+		StringBuilder tmp = new StringBuilder("<pre>");
 		tmp.append("<code>");
 		value = value.replaceAll("<", "&lt;");
 		value = value.replaceAll(">", "&gt;");
@@ -85,7 +85,7 @@ public class HTMLDecorator implements Decorator{
 			value = value.substring(0, value.length() - "\n".length());
 		}
 		tmp.append(value);
-		tmp.append("</code>\n");
+		tmp.append("</code>");
 		tmp.append("</pre>\n");
 		
 		return tmp.toString();
