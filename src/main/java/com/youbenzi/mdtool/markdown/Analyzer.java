@@ -26,8 +26,12 @@ public class Analyzer {
 	 * @return 语法块列表
 	 */
 	public static List<Block> analyze(String content) {
-		SyntaxFilter filter = new CodePartFilter(new CodeListFilter(
-				new TablePartFilter(new HeaderOneLineFilter(new ListFilter(new HeaderNextLineFilter(null))))));
+		SyntaxFilter filter = new CodePartFilter(
+				new TablePartFilter(
+					new HeaderOneLineFilter(
+						new ListFilter(
+							new CodeListFilter(
+								new HeaderNextLineFilter(null))))));
 
 		List<Block> blocks = filter.call(content);
 		return blocks;
