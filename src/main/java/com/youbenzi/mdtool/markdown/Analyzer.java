@@ -64,6 +64,7 @@ public class Analyzer {
 	private static List<ValuePart> text2ValuePart(String text, List<String> notCheckMDTokens,
 			List<String> currentTypes) {
 		List<ValuePart> result = new ArrayList<ValuePart>();
+		text = ValuePart.convertValue(text);
 		int textLength = text.length();
 		//1. 检索到第一个的md token。输出：位置i，语法：token
 		int i = textLength;
