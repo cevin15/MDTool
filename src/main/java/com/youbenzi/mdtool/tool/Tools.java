@@ -29,9 +29,9 @@ public class Tools {
 	
 	
     /**  
-     * 基本功能：过滤所有HTML标签  
-     * @param str  
-     * @return String  
+     * 过滤所有HTML标签  
+     * @param str  目标内容
+     * @return 过滤结果
      */  
     public static String filterHtml(String str) {   
         Pattern pattern = Pattern.compile(regxpForHtml);   
