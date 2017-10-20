@@ -40,6 +40,11 @@ public class MDTool {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(MDTool.markdown2Html(new File("test_file/file1.md")));
+		System.out.println(MDTool.markdown2Html("1. 123\n" + 
+				"2. 123123\n" + 
+				"	3. 12312\n" + 
+				"	4. 123123\n" + 
+				"	5. 12312\n" + 
+				"1. 13123"));
 	}
 }

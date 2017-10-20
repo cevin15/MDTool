@@ -26,6 +26,7 @@ public class Analyzer {
 	 * @return 语法块列表
 	 */
 	public static List<Block> analyze(String content) {
+		content = formatText(content);
 		SyntaxFilter filter = new CodePartFilter(
 				new TablePartFilter(
 					new HeaderOneLineFilter(
@@ -255,5 +256,15 @@ public class Analyzer {
 			valuePart.setTitle(str);
 			return valuePart;
 		}
+	}
+	
+	/**
+	 * 内容格式化
+	 * @param text 需要格式化的内容
+	 * @return 结果
+	 */
+	private static String formatText(String text) {
+		text = text.replaceAll("\t", "    ");
+		return text;
 	}
 }

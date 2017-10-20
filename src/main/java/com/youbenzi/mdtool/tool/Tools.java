@@ -37,12 +37,23 @@ public class Tools {
         Pattern pattern = Pattern.compile(regxpForHtml);   
         Matcher matcher = pattern.matcher(str);   
         StringBuffer sb = new StringBuffer();   
-        boolean result1 = matcher.find();   
-        while (result1) {   
+        boolean result = matcher.find();   
+        while (result) {   
             matcher.appendReplacement(sb, "");   
-            result1 = matcher.find();   
+            result = matcher.find();   
         }   
         matcher.appendTail(sb);   
         return sb.toString();   
-    }   
+    }
+    
+    public static void main(String[] args) {
+		String t = "1. 123\n" + 
+				"2. 123123\n" + 
+				"	3. 12312\n" + 
+				"	4. 123123\n" + 
+				"	5. 12312\n" + 
+				"1. 13123";
+		System.out.println(t.indexOf("\t"));
+		System.out.println(t.replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;"));
+	}
 }
