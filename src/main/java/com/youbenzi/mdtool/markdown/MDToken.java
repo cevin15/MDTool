@@ -13,6 +13,8 @@ public class MDToken {
 	public static String LINK = "[";
 	public static String UNORDERED_LIST1 = "* ";
 	public static String UNORDERED_LIST2 = "- ";
+	public static String TODO_LIST_UNCHECKED = "[ ]";
+	public static String TODO_LIST_CHECKED = "[x]";
 	public static String BOLD_WORD = "**";
 	public static String ITALIC_WORD = "_";
 	public static String ITALIC_WORD_2 = "*";

@@ -133,8 +133,9 @@ public class MultiListBuilder implements BlockBuilder {
 				value = br.readLine();
 				continue;
 			}
+			block.setMdToken(value.substring(0, index));
 			value = value.substring(index + 1).trim(); // 取出当前行取出列表符之后的真正数据
-
+			
 			if (value.equals("")) { // 空行直接忽略
 				value = br.readLine();
 				continue;
@@ -190,6 +191,9 @@ public class MultiListBuilder implements BlockBuilder {
 		if (isQuote(line)) {
 			return BlockType.QUOTE;
 		}
+		if (isTodoList(line)) {
+			return BlockType.TODO_LIST;
+		}
 		return null;
 	}
 
@@ -200,23 +204,36 @@ public class MultiListBuilder implements BlockBuilder {
 		if (type == BlockType.QUOTE) {
 			return line.indexOf(MDToken.QUOTE);
 		}
+		if (type == BlockType.TODO_LIST) {
+			int i = line.indexOf(MDToken.TODO_LIST_UNCHECKED);
+			if (i == -1) {
+				i = line.indexOf(MDToken.TODO_LIST_CHECKED);
+			}
+			if (i != -1) {
+				return i + 3;
+			}
+		}
 		return -1;
 	}
 
 	public static boolean isList(String str) {
-		return isOrderedList(str) || isUnOrderedList(str) || isQuote(str);
+		return isOrderedList(str) || isUnOrderedList(str) || isQuote(str) || isTodoList(str);
 	}
 
-	public static boolean isOrderedList(String str) {
+	private static boolean isOrderedList(String str) {
 		return Pattern.matches("^[\\d]+\\. [\\d\\D][^\n]*$", str.trim());
 	}
 
-	public static boolean isUnOrderedList(String str) {
+	private static boolean isUnOrderedList(String str) {
 		return str.trim().startsWith(MDToken.UNORDERED_LIST1) || str.trim().startsWith(MDToken.UNORDERED_LIST2);
 	}
 
-	public static boolean isQuote(String str) {
+	private static boolean isQuote(String str) {
 		return str.trim().startsWith(MDToken.QUOTE);
+	}
+	
+	private static boolean isTodoList(String str) {
+		return str.trim().startsWith(MDToken.TODO_LIST_UNCHECKED) || str.trim().startsWith(MDToken.TODO_LIST_CHECKED);
 	}
 
 	public boolean isRightType() {

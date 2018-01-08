@@ -5,12 +5,19 @@ import java.util.List;
 
 public class Block {
 
+	private String mdToken;
 	private BlockType type;
 	private ValuePart[] valueParts;
 	private int level;
 	private List<List<String>> tableData;
 	private List<Block> listData;
 	
+	public String getMdToken() {
+		return mdToken;
+	}
+	public void setMdToken(String mdToken) {
+		this.mdToken = mdToken;
+	}
 	public BlockType getType() {
 		return type;
 	}
@@ -50,6 +57,6 @@ public class Block {
 	}
 	@Override
 	public String toString() {
-		return "blockType:"+type+"|valueParts:"+Arrays.toString(valueParts)+"|level:"+level + "|listData:" + listData;
+		return "mdToken:"+ mdToken + "blockType:"+type+"|valueParts:"+Arrays.toString(valueParts)+"|level:"+level + "|listData:" + listData;
 	}
 }

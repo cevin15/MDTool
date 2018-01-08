@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
+import com.youbenzi.mdtool.markdown.MDToken;
 import com.youbenzi.mdtool.markdown.ValuePart;
 import com.youbenzi.mdtool.tool.MDTool;
 import com.youbenzi.mdtool.tool.Tools;
@@ -130,6 +131,9 @@ public class HTMLDecorator implements Decorator{
 			case QUOTE:
 				tmp.append(quoteParagraph(listData)).append("\n");
 				break;
+			case TODO_LIST:
+				tmp.append(todoListParagraph(listData)).append("\n");
+				break;
 			default:
 				break;
 		}
@@ -163,14 +167,14 @@ public class HTMLDecorator implements Decorator{
 	private String tableParagraph(List<List<String>> tableData){
 		
 		int nRows = tableData.size();
-    	int nCols = 0;
-    	for (List<String> list : tableData) {
+		int nCols = 0;
+		for (List<String> list : tableData) {
 			int s = list.size();
-			if(nCols<s){
+			if (nCols < s) {
 				nCols = s;
 			}
 		}
-    	StringBuilder tmp = new StringBuilder("<table>\n");
+	    	StringBuilder tmp = new StringBuilder("<table>\n");
     	
         for (int i=0; i<nRows; i++) {
 			tmp.append("<tr>\n");
@@ -201,52 +205,51 @@ public class HTMLDecorator implements Decorator{
         return tmp.toString();
     }
 	
-	private String abstractListParagraph(List<Block> listData, String parentTag, String childTag){
-		StringBuilder tmp = new StringBuilder("<" + parentTag + ">\n");
+	private String abstractListParagraph(List<Block> listData, LineHelper lineHelper){
+		StringBuilder tmp = new StringBuilder(lineHelper.parentTagBegin() + "\n");
 		for (final Block block : listData) {
-			tmp.append(listLine(block.getValueParts(), childTag, new LineHelper() {
-				public String subList() {
-					if(block.getType() != null) {
-						return listParagraph(block.getType(), block.getListData());
-					} else {
-						return "";
-					}
-				}
-			}));
+			tmp.append(listLine(block.getValueParts(), lineHelper.childTagBegin(block), lineHelper.childTagEnd(), lineHelper.subList(block)));
 		}
-		tmp.append("</" + parentTag + ">\n");
+		tmp.append(lineHelper.parentTagEnd() + "\n");
 		
 		return tmp.toString();
 	}
 	
 	private String quoteParagraph(List<Block> listData){
-		return abstractListParagraph(listData, "blockquote", "p");
+		return abstractListParagraph(listData, new DefaultLineHelper("blockquote", "p"));
 	}
 	
 	private String unorderedListParagraph(List<Block> listData){
-		return abstractListParagraph(listData, "ul", "li");
+		return abstractListParagraph(listData, new DefaultLineHelper("ul", "li"));
 	}
 	
 	private String orderedListParagraph(List<Block> listData){
-		String result = abstractListParagraph(listData, "ol", "li");
-		return result;
+		return abstractListParagraph(listData, new DefaultLineHelper("ol", "li"));
 	}
 	
-	private String commonTextParagraph(ValuePart[] valueParts){
-		
-		return listLine(valueParts, "p", new LineHelper() {
-			public String subList() {
-				return "";
+	private String todoListParagraph(List<Block> listData){
+		return abstractListParagraph(listData, new DefaultLineHelper("ul", "li") {
+			@Override
+			public String decorate(Block block, String tag) {
+				if (block.getMdToken().equals(MDToken.TODO_LIST_UNCHECKED)) {
+					return "<" + tag + "><i class=\"unchecked_icon\"/>";
+				} else {
+					return "<" + tag + "><i class=\"checked_icon\"/>";
+				}
 			}
 		});
 	}
 	
-	private String listLine(ValuePart[] valueParts, String tag, LineHelper lineHelper){
+	private String commonTextParagraph(ValuePart[] valueParts){
+		return listLine(valueParts, "<p>", "</p>", "");
+	}
+	
+	private String listLine(ValuePart[] valueParts, String tagBegin, String tagEnd, String subList){
 		StringBuilder tmp = new StringBuilder();
 		if(valueParts==null){
 			return tmp.toString();
 		}
-		tmp.append("<"+tag+">");
+		tmp.append(tagBegin);
 		for (ValuePart valuePart : valueParts) {
 			BlockType[] types = valuePart.getTypes();
 			
@@ -260,10 +263,9 @@ public class HTMLDecorator implements Decorator{
 				}
 			}
 			tmp.append(value);
-			
 		}
-		tmp.append(lineHelper.subList());
-		tmp.append("</"+tag+">\n");
+		tmp.append(subList);
+		tmp.append(tagEnd);
 		return tmp.toString();
 	}
 	
@@ -279,11 +281,49 @@ public class HTMLDecorator implements Decorator{
 		return false;
 	}
 	
-	public interface LineHelper {
-		public String subList();
+	public abstract class LineHelper {
+		public abstract String subList(Block block);
+		public abstract String parentTagBegin();
+		public abstract String parentTagEnd();
+		public abstract String childTagBegin(Block block);
+		public abstract String childTagEnd();
+		public String decorate(Block block, String tag) {
+			return "<" + tag + ">";
+		}
 	}
 	
-
+	public class DefaultLineHelper extends LineHelper {
+		private String parentTag;
+		private String childTag;
+		public DefaultLineHelper(String parentTag, String childTag) {
+			this.parentTag = parentTag;
+			this.childTag = childTag;
+		}
+		
+		public String parentTagBegin() {
+			return "<" + parentTag + ">";
+		}
+		
+		public String parentTagEnd() {
+			return "</" + parentTag + ">";
+		}
+		
+		public String childTagBegin(Block block) {
+			return decorate(block, childTag);
+		}
+		
+		public String childTagEnd() {
+			return "</" + childTag + ">";
+		}
+		
+		public String subList(Block block) {
+			if(block.getType() != null) {
+				return listParagraph(block.getType(), block.getListData());
+			} else {
+				return "";
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		String content = "1. 列表1.1\n"

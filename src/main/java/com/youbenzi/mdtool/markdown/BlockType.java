@@ -10,6 +10,7 @@ public enum BlockType {
 	QUOTE,
 	ORDERED_LIST,
 	UNORDERED_LIST,
+	TODO_LIST,
 	// 行
 	HEADLINE,
 	ROW,
