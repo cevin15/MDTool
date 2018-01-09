@@ -7,7 +7,7 @@ Pull from Maven Central Repository:
 <dependency>
     <groupId>com.youbenzi</groupId>
     <artifactId>MDTool</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 Or download from [here](download/).
@@ -25,4 +25,5 @@ MDTool.markdown2Html(markdown_content);
 1. Easy to use
 2. Support basic markdwon syntax
 3. Support table syntax
+3. Support todo list
 4. No other jar dependency
