@@ -232,9 +232,9 @@ public class HTMLDecorator implements Decorator{
 			@Override
 			public String decorate(Block block, String tag) {
 				if (block.getMdToken().equals(MDToken.TODO_LIST_UNCHECKED)) {
-					return "<" + tag + "><i class=\"unchecked_icon\"/>";
+					return "<" + tag + "><i class=\"unchecked_icon\"></i>";
 				} else {
-					return "<" + tag + "><i class=\"checked_icon\"/>";
+					return "<" + tag + "><i class=\"checked_icon\"></i>";
 				}
 			}
 		});
