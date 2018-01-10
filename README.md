@@ -21,7 +21,7 @@ or
 MDTool.markdown2Html(markdown_content);
 ```
 
-## Why use it？
+## Why use it?
 1. Easy to use
 2. Support basic markdwon syntax
 3. Support table syntax
