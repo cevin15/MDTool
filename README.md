@@ -27,3 +27,6 @@ MDTool.markdown2Html(markdown_content);
 3. Support table syntax
 3. Support todo list
 4. No other jar dependency
+
+## Looks like
+![Looks like](resource/example.jpg)
