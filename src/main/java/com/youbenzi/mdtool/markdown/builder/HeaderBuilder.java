@@ -27,7 +27,7 @@ public class HeaderBuilder implements BlockBuilder{
 		List<ValuePart> list = Analyzer.analyzeLineText(content);
 		block.setType(BlockType.HEADLINE);
 		block.setValueParts(list);
-		block.setLevel(level);
+		block.setLevel(level + 1);
 		return block;
 	}
 
