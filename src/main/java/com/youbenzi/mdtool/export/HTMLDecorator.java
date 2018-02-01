@@ -41,11 +41,11 @@ public class HTMLDecorator implements Decorator{
 					str = listParagraph(block.getListData());
 					break;
 				default:
-					str = commonTextParagraph(block.getValueParts());
+					str = commonTextParagraph(block.getValueParts(), true);
 					break;
 				}
 
-				content.append(str);
+				content.append(str).append("\n");
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -92,22 +92,8 @@ public class HTMLDecorator implements Decorator{
 		return tmp.toString();
 	}
 	
-	private String headerParagraph(ValuePart[] valueParts, int level){
-		level = level + 1;
-		StringBuilder tmp = new StringBuilder("<h"+level+">");
-		
-		for (ValuePart valuePart : valueParts) {
-			BlockType[] types = valuePart.getTypes();
-			String value  = valuePart.getValue();
-			if(types!=null){
-				for (BlockType type : types) {
-					value = formatByType(type, value, valuePart);
-				}
-			}
-			tmp.append(value);
-		}
-		tmp.append("</h"+level+">\n");
-		return tmp.toString();
+	private String headerParagraph(ValuePart[] valueParts, int level) {
+		return oneLineHtml(valueParts, "h" + level);
 	}
 
 	private String listParagraph(List<Block> listData) {
@@ -151,7 +137,8 @@ public class HTMLDecorator implements Decorator{
 			case CODE_WORD:
 				return "<code>"+value+"</code>";
 			case HEADLINE:
-				return "<h"+valuePart.getLevel()+">"+value+"</h"+valuePart.getLevel()+">";
+				int level = valuePart.getLevel() + 1;
+				return "<h"+ level +">"+value+"</h"+level+">";
 			case LINK:
 				return "<a href=\""+valuePart.getUrl()+"\" title=\"" + Tools.filterHtml(value) + "\">"+value+"</a>";
 			case IMG:
@@ -208,7 +195,16 @@ public class HTMLDecorator implements Decorator{
 	private String abstractListParagraph(List<Block> listData, LineHelper lineHelper){
 		StringBuilder tmp = new StringBuilder(lineHelper.parentTagBegin() + "\n");
 		for (final Block block : listData) {
-			tmp.append(listLine(block.getValueParts(), lineHelper.childTagBegin(block), lineHelper.childTagEnd(), lineHelper.subList(block)));
+			Block lineBlock = block.getLineData();
+			String content;
+			if (lineBlock.getType() == BlockType.HEADLINE) {
+				content = headerParagraph(lineBlock.getValueParts(), lineBlock.getLevel());
+			} else {
+				content = commonTextParagraph(lineBlock.getValueParts(), lineHelper.needDefaultChild());
+			}
+			tmp.append(lineHelper.childTagBegin(block));
+			tmp.append(content).append("\n").append(lineHelper.subList(block));
+			tmp.append(lineHelper.childTagEnd());
 		}
 		tmp.append(lineHelper.parentTagEnd() + "\n");
 		
@@ -216,7 +212,7 @@ public class HTMLDecorator implements Decorator{
 	}
 	
 	private String quoteParagraph(List<Block> listData){
-		return abstractListParagraph(listData, new DefaultLineHelper("blockquote", "p"));
+		return abstractListParagraph(listData, new DefaultLineHelper("blockquote"));
 	}
 	
 	private String unorderedListParagraph(List<Block> listData){
@@ -240,16 +236,15 @@ public class HTMLDecorator implements Decorator{
 		});
 	}
 	
-	private String commonTextParagraph(ValuePart[] valueParts){
-		return listLine(valueParts, "<p>", "</p>", "");
+	private String commonTextParagraph(ValuePart[] valueParts, boolean needPTag){
+		return oneLineHtml(valueParts, needPTag?"p":null);
 	}
 	
-	private String listLine(ValuePart[] valueParts, String tagBegin, String tagEnd, String subList){
-		StringBuilder tmp = new StringBuilder();
-		if(valueParts==null){
-			return tmp.toString();
+	private String oneLineHtml(ValuePart[] valueParts, String tagName) {
+		StringBuilder result = new StringBuilder();
+		if (tagName !=null && !tagName.trim().equals("")) {
+			result.append("<" + tagName + ">");
 		}
-		tmp.append(tagBegin);
 		for (ValuePart valuePart : valueParts) {
 			BlockType[] types = valuePart.getTypes();
 			
@@ -262,11 +257,12 @@ public class HTMLDecorator implements Decorator{
 					value = formatByType(type, value, valuePart);
 				}
 			}
-			tmp.append(value);
+			result.append(value);
 		}
-		tmp.append(subList);
-		tmp.append(tagEnd);
-		return tmp.toString();
+		if (tagName !=null && !tagName.trim().equals("")) {
+			result.append("</" + tagName + ">");
+		}
+		return result.toString();
 	}
 	
 	private boolean hasLink(BlockType[] types){
@@ -287,7 +283,11 @@ public class HTMLDecorator implements Decorator{
 		public abstract String parentTagEnd();
 		public abstract String childTagBegin(Block block);
 		public abstract String childTagEnd();
+		public abstract boolean needDefaultChild();
 		public String decorate(Block block, String tag) {
+			if (tag == null) {
+				return "";
+			}
 			return "<" + tag + ">";
 		}
 	}
@@ -298,6 +298,15 @@ public class HTMLDecorator implements Decorator{
 		public DefaultLineHelper(String parentTag, String childTag) {
 			this.parentTag = parentTag;
 			this.childTag = childTag;
+		}
+		
+		public DefaultLineHelper(String parentTag) {
+			this.parentTag = parentTag;
+			this.childTag = null;
+		}
+		
+		public boolean needDefaultChild() {
+			return childTag == null;
 		}
 		
 		public String parentTagBegin() {
@@ -313,6 +322,9 @@ public class HTMLDecorator implements Decorator{
 		}
 		
 		public String childTagEnd() {
+			if (childTag == null) {
+				return "";
+			}
 			return "</" + childTag + ">";
 		}
 		

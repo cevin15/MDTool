@@ -11,6 +11,7 @@ public class Block {
 	private int level;
 	private List<List<String>> tableData;
 	private List<Block> listData;
+	private Block lineData;
 	
 	public String getMdToken() {
 		return mdToken;
@@ -54,6 +55,12 @@ public class Block {
 	}
 	public void setListData(List<Block> listData) {
 		this.listData = listData;
+	}
+	public Block getLineData() {
+		return lineData;
+	}
+	public void setLineData(Block lineData) {
+		this.lineData = lineData;
 	}
 	@Override
 	public String toString() {

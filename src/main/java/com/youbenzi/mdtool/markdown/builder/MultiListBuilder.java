@@ -8,11 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.youbenzi.mdtool.markdown.Analyzer;
 import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
 import com.youbenzi.mdtool.markdown.MDToken;
-import com.youbenzi.mdtool.markdown.ValuePart;
 
 /**
  * 列表（有序列表，无序列表，引用）builder
@@ -140,22 +138,12 @@ public class MultiListBuilder implements BlockBuilder {
 				value = br.readLine();
 				continue;
 			}
-			int i = 0;
-			if (value.startsWith(MDToken.HEADLINE)) { // 检查是否有标题格式
-				i = value.lastIndexOf(MDToken.HEADLINE);
+			HeaderBuilder headerBuilder = new HeaderBuilder(value);
+			if (headerBuilder.isRightType()) {
+				block.setLineData(headerBuilder.bulid());
+			} else {
+				block.setLineData(new CommonTextBuilder(value).bulid());
 			}
-			if (i > 0) {
-				value = value.substring(i + 1).trim();
-			}
-
-			List<ValuePart> list = Analyzer.analyzeLineText(value);
-			if (i > 0) {
-				for (ValuePart valuePart : list) {
-					valuePart.addType(BlockType.HEADLINE);
-					valuePart.setLevel(i);
-				}
-			}
-			block.setValueParts(list);
 			listData.add(block);
 			value = br.readLine();
 			if (value == null) {
@@ -225,7 +213,9 @@ public class MultiListBuilder implements BlockBuilder {
 	}
 
 	private static boolean isUnOrderedList(String str) {
-		return str.trim().startsWith(MDToken.UNORDERED_LIST1) || str.trim().startsWith(MDToken.UNORDERED_LIST2);
+		return str.trim().startsWith(MDToken.UNORDERED_LIST1) || 
+				str.trim().startsWith(MDToken.UNORDERED_LIST2) ||
+				str.trim().startsWith(MDToken.UNORDERED_LIST3);
 	}
 
 	private static boolean isQuote(String str) {

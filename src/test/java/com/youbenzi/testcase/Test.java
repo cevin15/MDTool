@@ -12,5 +12,4 @@ public class Test {
 		String result = MDTool.markdown2Html(new File(Test.class.getResource("/file.md").getFile()));
 		System.out.println(result);
 	}
-	
 }
