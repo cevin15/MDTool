@@ -24,33 +24,31 @@ public class ListFilter extends SyntaxFilter {
 		StringBuilder outerText = new StringBuilder();
 		for (int idx = 0, si = lines.size(); idx < si; idx++) {
 			String str = lines.get(idx);
-			if (isListLine(str)) {	//列表开始
-				StringBuilder interText = new StringBuilder(trim(str)).append("\n");
-				for (int idx1 = (idx + 1); idx1 < si; idx1++) {
-					str = lines.get(idx1);
-					if(str.trim().equals("")){
-						how2AppendIfBlank(interText);
-					} else {
-						if(!isListLine(str)) {	//列表结束，跳出循环
-							idx = idx1 - 1;		//外部循环开始读数据的地方
-							break;
-						}else{
-							interText.append(trim(str)).append("\n");
-						}
-					}
-					if(idx1 == (si - 1)) {	//列表已无可读数据，通知外部循环不需要再继续读取数据
-						idx = idx1;
-					}
-				}
-				
-				if (!outerText.toString().equals("")) {
-					textOrBlocks.add(new TextOrBlock(outerText.toString()));
-					outerText = new StringBuilder();
-				}
-				textOrBlocks.add(new TextOrBlock(buildBlock(interText.toString())));
-			} else {
+			if (!isListLine(str)) {
 				outerText.append(str + "\n");
+				continue;
 			}
+			StringBuilder interText = new StringBuilder(str).append("\n");
+			for (int idx1 = (idx + 1); idx1 < si; idx1++) {
+				str = lines.get(idx1);
+				if(!str.trim().equals("")){
+					if(!isListLine(str)) {	//列表结束，跳出循环
+						idx = idx1 - 1;		//外部循环开始读数据的地方
+						break;
+					}else{
+						interText.append(str).append("\n");
+					}
+				}
+				if(idx1 == (si - 1)) {	//列表已无可读数据，通知外部循环不需要再继续读取数据
+					idx = idx1;
+				}
+			}
+			
+			if (!outerText.toString().equals("")) {
+				textOrBlocks.add(new TextOrBlock(outerText.toString()));
+				outerText = new StringBuilder();
+			}
+			textOrBlocks.add(new TextOrBlock(buildBlock(interText.toString())));
 		}
 		if (!outerText.toString().equals("")) {
 			textOrBlocks.add(new TextOrBlock(outerText.toString()));
@@ -68,16 +66,6 @@ public class ListFilter extends SyntaxFilter {
 	}
 	
 	/**
-	 * 对内容进行无用字符截取
-	 * @param target 截取目标
-	 * @return 结果
-	 */
-	protected String trim(String target) {
-		//do nothing
-		return target;
-	}
-	
-	/**
 	 * 创建对应的block
 	 * @param source 元数据
 	 * @return 创建结果
@@ -86,11 +74,4 @@ public class ListFilter extends SyntaxFilter {
 		return new MultiListBuilder(source).bulid();
 	}
 	
-	/**
-	 * 如果数据为空怎么处理
-	 * @param target 处理目标
-	 */
-	protected void how2AppendIfBlank(StringBuilder target) {
-		//do nothing
-	}
 }

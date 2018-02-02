@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.youbenzi.mdtool.markdown.TextLinePiece.PieceType;
-import com.youbenzi.mdtool.markdown.filter.CodeListFilter;
 import com.youbenzi.mdtool.markdown.filter.CodePartFilter;
 import com.youbenzi.mdtool.markdown.filter.HeaderNextLineFilter;
 import com.youbenzi.mdtool.markdown.filter.HeaderOneLineFilter;
@@ -31,8 +30,7 @@ public class Analyzer {
 				new TablePartFilter(
 					new HeaderOneLineFilter(
 						new ListFilter(
-							new CodeListFilter(
-								new HeaderNextLineFilter(null))))));
+							new HeaderNextLineFilter(null)))));
 
 		List<Block> blocks = filter.call(content);
 		return blocks;
