@@ -151,11 +151,11 @@ public class HTMLDecorator implements Decorator{
 		}
 	}
 	
-	private String tableParagraph(List<List<String>> tableData){
+	private String tableParagraph(List<List<Block>> tableData){
 		
 		int nRows = tableData.size();
 		int nCols = 0;
-		for (List<String> list : tableData) {
+		for (List<Block> list : tableData) {
 			int s = list.size();
 			if (nCols < s) {
 				nCols = s;
@@ -165,7 +165,7 @@ public class HTMLDecorator implements Decorator{
     	
         for (int i=0; i<nRows; i++) {
 			tmp.append("<tr>\n");
-			List<String> colDatas = tableData.get(i);
+			List<Block> colDatas = tableData.get(i);
 			for(int j=0; j<nCols; j++){
 				
 				if(i==0){
@@ -173,13 +173,11 @@ public class HTMLDecorator implements Decorator{
 				}else{
 					tmp.append("<td>");
 				}
-				tmp.append("<p>");
 				try {
-					tmp.append(colDatas.get(j));
+					tmp.append(commonTextParagraph(colDatas.get(j).getValueParts(), false));
 				} catch (Exception e) {
 					tmp.append("");
 				}
-				tmp.append("</p>");
 				if(i==0){
 					tmp.append("</th>\n");
 				}else{

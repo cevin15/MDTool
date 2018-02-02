@@ -9,7 +9,7 @@ public class Block {
 	private BlockType type;
 	private ValuePart[] valueParts;
 	private int level;
-	private List<List<String>> tableData;
+	private List<List<Block>> tableData;
 	private List<Block> listData;
 	private Block lineData;
 	
@@ -44,10 +44,10 @@ public class Block {
 	public void setLevel(int level) {
 		this.level = level;
 	}
-	public List<List<String>> getTableData() {
+	public List<List<Block>> getTableData() {
 		return tableData;
 	}
-	public void setTableData(List<List<String>> tableData) {
+	public void setTableData(List<List<Block>> tableData) {
 		this.tableData = tableData;
 	}
 	public List<Block> getListData() {
