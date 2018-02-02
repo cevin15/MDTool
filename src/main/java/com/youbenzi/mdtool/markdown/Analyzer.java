@@ -14,7 +14,7 @@ import com.youbenzi.mdtool.markdown.filter.TablePartFilter;
 
 public class Analyzer {
 
-	private static List<String> mdTokenInLine = Arrays.asList(MDToken.BOLD_WORD, MDToken.ITALIC_WORD,
+	private static List<String> mdTokenInLine = Arrays.asList(MDToken.BOLD_WORD1, MDToken.BOLD_WORD2, MDToken.ITALIC_WORD,
 			MDToken.ITALIC_WORD_2, MDToken.STRIKE_WORD, MDToken.CODE_WORD, MDToken.IMG, MDToken.LINK);
 
 	/**

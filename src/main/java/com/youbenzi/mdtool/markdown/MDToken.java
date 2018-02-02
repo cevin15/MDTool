@@ -16,7 +16,8 @@ public class MDToken {
 	public static String UNORDERED_LIST3 = "+ ";
 	public static String TODO_LIST_UNCHECKED = "[ ]";
 	public static String TODO_LIST_CHECKED = "[x]";
-	public static String BOLD_WORD = "**";
+	public static String BOLD_WORD1 = "**";
+	public static String BOLD_WORD2 = "__";
 	public static String ITALIC_WORD = "_";
 	public static String ITALIC_WORD_2 = "*";
 	public static String STRIKE_WORD = "~~";
@@ -47,7 +48,7 @@ public class MDToken {
 			return BlockType.HEADLINE;
 		}else if(mdToken.equals(IMG)){
 			return BlockType.IMG;
-		}else if(mdToken.equals(BOLD_WORD)){
+		}else if(mdToken.equals(BOLD_WORD1) || mdToken.equals(BOLD_WORD2)){
 			return BlockType.BOLD_WORD;
 		}else if(mdToken.equals(ITALIC_WORD) || mdToken.equals(ITALIC_WORD_2)){
 			return BlockType.ITALIC_WORD;
