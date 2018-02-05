@@ -39,7 +39,7 @@ public class TablePartFilter extends SyntaxFilter{
 				continue;
 			}
 			
-			/** 检查到真的有table存在，处理Header内容 **/
+			/** 检查到真的有table存在，处理Table内容 **/
 			if (!outerText.toString().equals("")) { // 把已存入stringbuffer的内容先归档
 				textOrBlocks.add(new TextOrBlock(outerText.toString()));
 				outerText = new StringBuilder();
@@ -78,7 +78,6 @@ public class TablePartFilter extends SyntaxFilter{
 		}
 		return textOrBlocks;
 	}
-	
 	
 	private boolean findTableHeader(String currentLine) {
 		if (currentLine.indexOf("|") == -1) { // 检查是否有table的分隔符
