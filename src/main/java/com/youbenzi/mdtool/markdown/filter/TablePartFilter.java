@@ -29,16 +29,15 @@ public class TablePartFilter extends SyntaxFilter{
 				continue;
 			}
 			if ((i + 1) == l) {	//已到内容末尾
+				outerText.append(str + "\n");
 				break;
 			}
-			int tableSplitLineNum = -1;
-			tableSplitLineNum = findTableDataSplitLine(i + 1, lines);		// 检查到符合规范的table头之后，检测下一行是否为 ---|---的类似字符串
 			
-			if (tableSplitLineNum == -1) {
+			if (!isTableDataSplitLine(lines.get(i + 1))) {	// 检查到符合规范的table头之后，检测下一行是否为 ---|---的类似字符串
 				outerText.append(str + "\n");
 				continue;
 			}
-			
+			int tableSplitLineNum = i + 1;
 			/** 检查到真的有table存在，处理Table内容 **/
 			if (!outerText.toString().equals("")) { // 把已存入stringbuffer的内容先归档
 				textOrBlocks.add(new TextOrBlock(outerText.toString()));
@@ -51,24 +50,20 @@ public class TablePartFilter extends SyntaxFilter{
 					continue;
 				}
 				String tableLine = lines.get(j);
-				if (tableLine==null || tableLine.trim().equals("")) {
-					continue;
+				if (tableLine==null || tableLine.trim().equals("")) {		//空行，表格结束
+					List<List<String>> tableDatas = trimTableData(tableDataList);
+					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas).bulid()));
+					
+					i = (j - 1);
+					break;
 				}
 				String[] cellDatas = tableLine.split("\\|");
-				if (cellDatas.length >= 2) { // 此行是table的数据
-					tableDataList.add(Arrays.asList(cellDatas));
-					if (j == (l - 1)) { // 到内容底部，table数据结束，归档
-						List<List<String>> tableDatas = trimTableData(tableDataList);
-						textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas).bulid()));
-
-						i = j; // 设置游标，跳出循环
-						break;
-					}
-				} else { // table数据结束，归档
+				tableDataList.add(Arrays.asList(cellDatas));
+				if (j == (l - 1)) { // 到内容底部，table数据结束，归档
 					List<List<String>> tableDatas = trimTableData(tableDataList);
 					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas).bulid()));
 
-					i = (j - 1); // 设置游标，跳出循环
+					i = j; // 设置游标，跳出循环
 					break;
 				}
 			}
@@ -96,27 +91,18 @@ public class TablePartFilter extends SyntaxFilter{
 		return true;
 	}
 
-	private int findTableDataSplitLine(int startIndex, List<String> lines) {
-		String nextLine = null;
-		int lineNum = -1;
-		for (int i = startIndex, l = lines.size(); i < l; i++) {
-			nextLine = lines.get(i);
-			if (nextLine != null && !nextLine.trim().equals("")) {
-				lineNum = i;
-				break;
-			}
-		}
+	private boolean isTableDataSplitLine(String nextLine) {
 		if (nextLine == null || nextLine.trim().equals("")) {
-			return -1;
+			return false;
 		}
 		String[] nextParts = nextLine.split("\\|");
 		for (String part : nextParts) {
 			part = part.trim().replaceAll("-", "");
 			if (!(part.equals("") || part.equals(":") || part.equals("::"))) {
-				return -1;
+				return false;
 			}
 		}
-		return lineNum;
+		return true;
 	}
 	
 	private List<List<String>> trimTableData(List<List<String>> tableDataList) {

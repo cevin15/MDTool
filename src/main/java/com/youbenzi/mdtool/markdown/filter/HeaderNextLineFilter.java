@@ -14,7 +14,7 @@ import com.youbenzi.mdtool.markdown.builder.HeaderBuilder;
  * @author yangyingqiang
  * 2017年7月14日 下午4:15:52
  */
-public class HeaderNextLineFilter extends SyntaxFilter{
+public class HeaderNextLineFilter extends SyntaxFilter {
 
 	public HeaderNextLineFilter(SyntaxFilter nextFilter) {
 		super(nextFilter);
