@@ -121,6 +121,9 @@ public class Analyzer {
 			case COMMON:
 			default:
 				String sencondPart = text.substring(piece.getBeginIndex() + mdToken.length(), secondPartEndIndex);
+				if (mdToken.equals(MDToken.CODE_WORD)) {		//如果是代码块，则不分析中间的语法了
+					notCheckMDTokensClone = mdTokenInLine;
+				}
 				List<ValuePart> tmpList2 = text2ValuePart(sencondPart, notCheckMDTokensClone, currentTypesClone);
 				for (ValuePart tmp : tmpList2) {
 					result.add(tmp);
