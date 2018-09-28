@@ -98,6 +98,12 @@ public class TablePartFilter extends SyntaxFilter{
 		if (nextLine == null || nextLine.trim().equals("")) {
 			return false;
 		}
+		if (nextLine.startsWith("|")) {
+			nextLine = nextLine.substring(1);
+		}
+		if (nextLine.endsWith("|")) {
+			nextLine = nextLine.substring(0, nextLine.length() - 1);
+		}
 		String[] nextParts = nextLine.split("\\|");
 		for (int i = 0, l = nextParts.length; i < l; i++) {
 			String part = nextParts[i];
