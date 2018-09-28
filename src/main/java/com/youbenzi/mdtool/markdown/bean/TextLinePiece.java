@@ -1,4 +1,4 @@
-package com.youbenzi.mdtool.markdown;
+package com.youbenzi.mdtool.markdown.bean;
 
 public class TextLinePiece {
 	private int beginIndex;

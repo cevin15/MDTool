@@ -1,6 +1,6 @@
 package com.youbenzi.mdtool.markdown.builder;
 
-import com.youbenzi.mdtool.markdown.Block;
+import com.youbenzi.mdtool.markdown.bean.Block;
 
 /**
  * markdown语法块

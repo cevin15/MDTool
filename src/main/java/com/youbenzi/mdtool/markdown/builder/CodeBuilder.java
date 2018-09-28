@@ -1,8 +1,8 @@
 package com.youbenzi.mdtool.markdown.builder;
 
-import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
-import com.youbenzi.mdtool.markdown.ValuePart;
+import com.youbenzi.mdtool.markdown.bean.Block;
+import com.youbenzi.mdtool.markdown.bean.ValuePart;
 
 public class CodeBuilder implements BlockBuilder{
 

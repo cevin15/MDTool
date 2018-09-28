@@ -8,9 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
 import com.youbenzi.mdtool.markdown.MDToken;
+import com.youbenzi.mdtool.markdown.bean.Block;
 
 /**
  * 列表（有序列表，无序列表，引用）builder

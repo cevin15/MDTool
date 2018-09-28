@@ -1,7 +1,10 @@
-package com.youbenzi.mdtool.markdown;
+package com.youbenzi.mdtool.markdown.bean;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.youbenzi.mdtool.markdown.BlockType;
+import com.youbenzi.mdtool.markdown.TableCellAlign;
 
 public class Block {
 
@@ -12,6 +15,7 @@ public class Block {
 	private List<List<Block>> tableData;
 	private List<Block> listData;
 	private Block lineData;
+	private TableCellAlign align;
 	
 	public String getMdToken() {
 		return mdToken;
@@ -61,6 +65,12 @@ public class Block {
 	}
 	public void setLineData(Block lineData) {
 		this.lineData = lineData;
+	}
+	public TableCellAlign getAlign() {
+		return align;
+	}
+	public void setAlign(TableCellAlign align) {
+		this.align = align;
 	}
 	@Override
 	public String toString() {

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.youbenzi.mdtool.markdown.TextLinePiece.PieceType;
+import com.youbenzi.mdtool.markdown.bean.Block;
+import com.youbenzi.mdtool.markdown.bean.TextLinePiece;
+import com.youbenzi.mdtool.markdown.bean.ValuePart;
+import com.youbenzi.mdtool.markdown.bean.TextLinePiece.PieceType;
 import com.youbenzi.mdtool.markdown.filter.CodePartFilter;
 import com.youbenzi.mdtool.markdown.filter.HeaderNextLineFilter;
 import com.youbenzi.mdtool.markdown.filter.HeaderOneLineFilter;

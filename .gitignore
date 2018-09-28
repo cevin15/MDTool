@@ -18,3 +18,5 @@ tmp/
 bin/
 build/
 target/
+gradle.properties
+.gradle/

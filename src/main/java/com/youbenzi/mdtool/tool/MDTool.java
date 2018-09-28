@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.youbenzi.mdtool.export.HTMLDecorator;
 import com.youbenzi.mdtool.markdown.Analyzer;
-import com.youbenzi.mdtool.markdown.Block;
+import com.youbenzi.mdtool.markdown.bean.Block;
 
 public class MDTool {
 

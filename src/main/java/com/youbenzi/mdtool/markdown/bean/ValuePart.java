@@ -1,7 +1,10 @@
-package com.youbenzi.mdtool.markdown;
+package com.youbenzi.mdtool.markdown.bean;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
+
+import com.youbenzi.mdtool.markdown.BlockType;
+import com.youbenzi.mdtool.markdown.MDToken;
 
 public class ValuePart{
 	private String value;

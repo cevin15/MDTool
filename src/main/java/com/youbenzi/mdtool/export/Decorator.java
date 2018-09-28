@@ -2,7 +2,7 @@ package com.youbenzi.mdtool.export;
 
 import java.util.List;
 
-import com.youbenzi.mdtool.markdown.Block;
+import com.youbenzi.mdtool.markdown.bean.Block;
 
 public interface Decorator {
 	

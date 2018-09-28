@@ -3,7 +3,7 @@ package com.youbenzi.mdtool.markdown.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.youbenzi.mdtool.markdown.TextOrBlock;
+import com.youbenzi.mdtool.markdown.bean.TextOrBlock;
 import com.youbenzi.mdtool.markdown.builder.HeaderBuilder;
 
 /**

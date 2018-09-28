@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.youbenzi.mdtool.markdown.Analyzer;
-import com.youbenzi.mdtool.markdown.Block;
 import com.youbenzi.mdtool.markdown.BlockType;
-import com.youbenzi.mdtool.markdown.ValuePart;
+import com.youbenzi.mdtool.markdown.bean.Block;
+import com.youbenzi.mdtool.markdown.bean.ValuePart;
 import com.youbenzi.mdtool.tool.Tools;
 
 public class CommonTextBuilder implements BlockBuilder{

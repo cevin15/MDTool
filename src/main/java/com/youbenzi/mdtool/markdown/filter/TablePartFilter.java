@@ -2,9 +2,12 @@ package com.youbenzi.mdtool.markdown.filter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.youbenzi.mdtool.markdown.TextOrBlock;
+import com.youbenzi.mdtool.markdown.TableCellAlign;
+import com.youbenzi.mdtool.markdown.bean.TextOrBlock;
 import com.youbenzi.mdtool.markdown.builder.TableBuilder;
 
 /**
@@ -32,8 +35,8 @@ public class TablePartFilter extends SyntaxFilter{
 				outerText.append(str + "\n");
 				break;
 			}
-			
-			if (!isTableDataSplitLine(lines.get(i + 1))) {	// 检查到符合规范的table头之后，检测下一行是否为 ---|---的类似字符串
+			Map<Integer, TableCellAlign> cellAligns = new HashMap<>();
+			if (!isTableDataSplitLine(lines.get(i + 1), cellAligns)) {	// 检查到符合规范的table头之后，检测下一行是否为 ---|---的类似字符串
 				outerText.append(str + "\n");
 				continue;
 			}
@@ -52,7 +55,7 @@ public class TablePartFilter extends SyntaxFilter{
 				String tableLine = lines.get(j);
 				if (tableLine==null || tableLine.trim().equals("")) {		//空行，表格结束
 					List<List<String>> tableDatas = trimTableData(tableDataList);
-					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas).bulid()));
+					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas, cellAligns).bulid()));
 					
 					i = (j - 1);
 					break;
@@ -61,7 +64,7 @@ public class TablePartFilter extends SyntaxFilter{
 				tableDataList.add(Arrays.asList(cellDatas));
 				if (j == (l - 1)) { // 到内容底部，table数据结束，归档
 					List<List<String>> tableDatas = trimTableData(tableDataList);
-					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas).bulid()));
+					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas, cellAligns).bulid()));
 
 					i = j; // 设置游标，跳出循环
 					break;
@@ -91,15 +94,25 @@ public class TablePartFilter extends SyntaxFilter{
 		return true;
 	}
 
-	private boolean isTableDataSplitLine(String nextLine) {
+	private boolean isTableDataSplitLine(String nextLine, Map<Integer, TableCellAlign> cellAligns) {
 		if (nextLine == null || nextLine.trim().equals("")) {
 			return false;
 		}
 		String[] nextParts = nextLine.split("\\|");
-		for (String part : nextParts) {
-			part = part.trim().replaceAll("-", "");
-			if (!(part.equals("") || part.equals(":") || part.equals("::"))) {
+		for (int i = 0, l = nextParts.length; i < l; i++) {
+			String part = nextParts[i];
+			String tmp = part.trim().replaceAll("-", "");
+			if (!(tmp.equals("") || tmp.equals(":") || tmp.equals("::"))) {
 				return false;
+			}
+			if (part.startsWith(":") && part.endsWith(":")) {
+				cellAligns.put(i, TableCellAlign.CENTER);
+			} else if (part.endsWith(":")) {
+				cellAligns.put(i, TableCellAlign.RIGHT);
+			} else if (part.startsWith(":")) {
+				cellAligns.put(i, TableCellAlign.LEFT);
+			} else {
+				cellAligns.put(i, TableCellAlign.NONE);
 			}
 		}
 		return true;
