@@ -5,24 +5,24 @@ import java.util.Map;
 
 public class MDToken {
 
-	public static String QUOTE = ">";
-	public static String CODE = "```";
-	public static String CODE_BLANK = "    ";
-	public static String HEADLINE = "#";
-	public static String IMG = "![";
-	public static String LINK = "[";
-	public static String UNORDERED_LIST1 = "* ";
-	public static String UNORDERED_LIST2 = "- ";
-	public static String UNORDERED_LIST3 = "+ ";
-	public static String TODO_LIST_UNCHECKED = "[ ]";
-	public static String TODO_LIST_CHECKED = "[x]";
-	public static String BOLD_WORD1 = "**";
-	public static String BOLD_WORD2 = "__";
-	public static String ITALIC_WORD = "_";
-	public static String ITALIC_WORD_2 = "*";
-	public static String STRIKE_WORD = "~~";
-	public static String CODE_WORD = "`";
-	public static String ROW = "  ";
+	public static final String QUOTE = ">";
+	public static final String CODE = "```";
+	public static final String CODE_BLANK = "    ";
+	public static final String HEADLINE = "#";
+	public static final String IMG = "![";
+	public static final String LINK = "[";
+	public static final String UNORDERED_LIST1 = "* ";
+	public static final String UNORDERED_LIST2 = "- ";
+	public static final String UNORDERED_LIST3 = "+ ";
+	public static final String TODO_LIST_UNCHECKED = "[ ]";
+	public static final String TODO_LIST_CHECKED = "[x]";
+	public static final String BOLD_WORD1 = "**";
+	public static final String BOLD_WORD2 = "__";
+	public static final String ITALIC_WORD = "_";
+	public static final String ITALIC_WORD_2 = "*";
+	public static final String STRIKE_WORD = "~~";
+	public static final String CODE_WORD = "`";
+	public static final String ROW = "  ";
 
 	public static Map<String, String> PLACEHOLDER_MAP = new LinkedHashMap<String, String>() { // 需要显示的特殊符号的占位符
 		private static final long serialVersionUID = 5649442662460683378L;
