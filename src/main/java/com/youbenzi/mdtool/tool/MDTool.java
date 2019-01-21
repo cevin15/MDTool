@@ -19,6 +19,7 @@ public class MDTool {
 			StringBuffer sb = new StringBuffer();
 			while ((lineStr = reader.readLine())!=null) {
 				sb.append(lineStr).append("\n");
+				System.out.println(lineStr);
 			}
 			return markdown2Html(sb.toString());
 		} catch (IOException e) {

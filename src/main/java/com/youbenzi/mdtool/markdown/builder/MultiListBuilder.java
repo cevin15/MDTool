@@ -109,7 +109,6 @@ public class MultiListBuilder implements BlockBuilder {
 
 	private String buildListBlock(Block result, String value, BufferedReader br, List<TypeAndBlank> levels)
 			throws IOException {
-
 		String firstBlankStr = blankStrInHead(value);
 		BlockType firstCurrentType = listType(value);
 		List<Block> listData = new ArrayList<Block>();
@@ -138,15 +137,18 @@ public class MultiListBuilder implements BlockBuilder {
 				value = br.readLine();
 				continue;
 			}
-			HeaderBuilder headerBuilder = new HeaderBuilder(value);
+			listData.add(block);
+			StringBuffer currentLine = new StringBuffer(value);		//当前行的内容
+			value = ifNextLineIsContent(currentLine, br);
+			
+			HeaderBuilder headerBuilder = new HeaderBuilder(currentLine.toString());
 			if (headerBuilder.isRightType()) {
 				block.setLineData(headerBuilder.bulid());
 			} else {
-				block.setLineData(new CommonTextBuilder(value).bulid());
+				block.setLineData(new CommonTextBuilder(currentLine.toString()).bulid());
 			}
-			listData.add(block);
-			value = br.readLine();
-			if (value == null) {
+			
+			if (value == null) {	//下一行为空行
 				break;
 			}
 			blockType = listType(value);
@@ -164,6 +166,25 @@ public class MultiListBuilder implements BlockBuilder {
 			}
 		}
 		return value;
+	}
+	
+	/**
+	 * 检测下一行是否为当前行的内容
+	 * @param currentLine
+	 * @param br
+	 * @return
+	 * @throws IOException
+	 */
+	private static String ifNextLineIsContent(StringBuffer currentLine, BufferedReader br) throws IOException {
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			if (!isList(line) && !line.trim().equals("")) {	//如果不是列表格式，并且不是空行，则为列表的内容
+				currentLine = currentLine.append("  \n").append(line);
+			} else {
+				return line;
+			}
+		}
+		return null;
 	}
 
 	private static BlockType listType(String line) {

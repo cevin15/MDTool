@@ -28,16 +28,19 @@ public class ListFilter extends SyntaxFilter {
 				outerText.append(str + "\n");
 				continue;
 			}
+			boolean preLineIsBlank = false;
 			StringBuilder interText = new StringBuilder(str).append("\n");
 			for (int idx1 = (idx + 1); idx1 < si; idx1++) {
 				str = lines.get(idx1);
 				if(!str.trim().equals("")){
-					if(!isListLine(str)) {	//列表结束，跳出循环
+					if(!isListLine(str) && preLineIsBlank) {	//列表结束，跳出循环
 						idx = idx1 - 1;		//外部循环开始读数据的地方
 						break;
-					}else{
-						interText.append(str).append("\n");
 					}
+					interText.append(str).append("\n");
+					preLineIsBlank = false;
+				} else {
+					preLineIsBlank = true;
 				}
 				if(idx1 == (si - 1)) {	//列表已无可读数据，通知外部循环不需要再继续读取数据
 					idx = idx1;
