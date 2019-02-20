@@ -7,7 +7,7 @@ Pull from Maven Central Repository:
 <dependency>
     <groupId>com.youbenzi</groupId>
     <artifactId>MDTool</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
 </dependency>
 ```
 Or download from [here](download/).
