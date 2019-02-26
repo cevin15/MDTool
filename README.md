@@ -14,7 +14,7 @@ Or download from [here](download/).
 
 Usage:
 ```java
-MDTool.markdown2Html(new File(markdown_file_path));
+MDTool.markdown2Html(new File(markdown_file_path, charset));
 ```
 or 
 ```java
