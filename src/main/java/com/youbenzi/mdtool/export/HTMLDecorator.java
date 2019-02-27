@@ -136,6 +136,8 @@ public class HTMLDecorator implements Decorator {
 		case STRIKE_WORD:
 			return "<del>" + value + "</del>";
 		case CODE_WORD:
+			value = value.replaceAll("<", "&lt;");
+			value = value.replaceAll(">", "&gt;");
 			return "<code>" + value + "</code>";
 		case HEADLINE:
 			int level = valuePart.getLevel() + 1;
