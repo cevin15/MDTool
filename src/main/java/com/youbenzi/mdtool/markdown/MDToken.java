@@ -23,6 +23,7 @@ public class MDToken {
 	public static final String STRIKE_WORD = "~~";
 	public static final String CODE_WORD = "`";
 	public static final String ROW = "  ";
+	public static final String TABLE_COL = "|";
 
 	public static final Map<String, String> PLACEHOLDER_MAP = new LinkedHashMap<String, String>() { // 需要显示的特殊符号的占位符
 		private static final long serialVersionUID = 5649442662460683378L;
@@ -35,6 +36,7 @@ public class MDToken {
 			put("\\" + ITALIC_WORD_2, "$2ITALICWORD");
 			put("\\" + STRIKE_WORD, "$STRIKEWORD");
 			put("\\" + CODE_WORD, "$CODEWORD");
+			put("\\" + TABLE_COL, "$TABLE_COL");
 			put("\\", "");
 		}
 	};

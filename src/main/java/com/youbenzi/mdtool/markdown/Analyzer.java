@@ -14,6 +14,7 @@ import com.youbenzi.mdtool.markdown.filter.HeaderOneLineFilter;
 import com.youbenzi.mdtool.markdown.filter.ListFilter;
 import com.youbenzi.mdtool.markdown.filter.SyntaxFilter;
 import com.youbenzi.mdtool.markdown.filter.TablePartFilter;
+import com.youbenzi.mdtool.tool.Tools;
 
 public class Analyzer {
 
@@ -66,7 +67,7 @@ public class Analyzer {
 	private static List<ValuePart> text2ValuePart(String text, List<String> notCheckMDTokens,
 			List<String> currentTypes) {
 		List<ValuePart> result = new ArrayList<ValuePart>();
-		text = ValuePart.convertValue(text);
+		// text = ValuePart.convertValue(text);
 		int textLength = text.length();
 		//1. 检索到第一个的md token。输出：位置i，语法：token
 		int i = textLength;
@@ -269,6 +270,7 @@ public class Analyzer {
 	 */
 	private static String formatText(String text) {
 		text = text.replaceAll("\t", "    ");
+		text = Tools.convertValue(text);
 		return text;
 	}
 }

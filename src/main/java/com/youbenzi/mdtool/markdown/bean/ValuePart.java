@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import com.youbenzi.mdtool.markdown.BlockType;
 import com.youbenzi.mdtool.markdown.MDToken;
+import com.youbenzi.mdtool.tool.Tools;
 
 public class ValuePart{
 	private String value;
@@ -18,11 +19,11 @@ public class ValuePart{
 	}
 	
 	public ValuePart(String value){
-		this.value = revertValue(value);
+		this.value = Tools.revertValue(value);
 	}
 	
 	public ValuePart(String value, BlockType... types){
-		this.value = revertValue(value);
+		this.value = Tools.revertValue(value);
 		this.types = types;
 	}
 	
@@ -30,7 +31,7 @@ public class ValuePart{
 		return value;
 	}
 	public void setValue(String value) {
-		this.value = revertValue(value);
+		this.value = Tools.revertValue(value);
 	}
 	public BlockType[] getTypes() {
 		return types;
@@ -67,32 +68,6 @@ public class ValuePart{
 		types[types.length-1] = type;
 	}
 
-	/**
-	 * 还原value中的特殊符号占位符
-	 * @param value 操作对象
-	 * @return 还原结果
-	 */
-	public static String revertValue(String value) {
-
-		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
-			String tmpValue = entry.getKey().substring(1);	//需要去除第一个反斜杠
-			value = value.replace(entry.getValue(), tmpValue);
-		}
-		return value;
-	}
-	
-	/**
-	 * 把需要显示的特殊符号转换为占位符
-	 * @param value 操作对象
-	 * @return 转换结果
-	 */
-	public static String convertValue(String value) {
-		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
-			value = value.replace(entry.getKey(), entry.getValue());
-		}
-		return value;
-	}
-	
 	@Override
 	public String toString() {
 		return "value:"+value+"|types:"+Arrays.toString(types);

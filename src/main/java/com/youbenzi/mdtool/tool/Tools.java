@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.youbenzi.mdtool.markdown.MDToken;
 
 public class Tools {
 
@@ -44,7 +47,33 @@ public class Tools {
         }   
         matcher.appendTail(sb);   
         return sb.toString();   
-    }
+	}
+	
+	/**
+	 * 还原value中的特殊符号占位符
+	 * @param value 操作对象
+	 * @return 还原结果
+	 */
+	public static String revertValue(String value) {
+
+		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
+			String tmpValue = entry.getKey().substring(1);	//需要去除第一个反斜杠
+			value = value.replace(entry.getValue(), tmpValue);
+		}
+		return value;
+	}
+	
+	/**
+	 * 把需要显示的特殊符号转换为占位符
+	 * @param value 操作对象
+	 * @return 转换结果
+	 */
+	public static String convertValue(String value) {
+		for (Entry<String, String> entry : MDToken.PLACEHOLDER_MAP.entrySet()) {
+			value = value.replace(entry.getKey(), entry.getValue());
+		}
+		return value;
+	}
     
     public static void main(String[] args) {
 		String t = "1. 123\n" + 
