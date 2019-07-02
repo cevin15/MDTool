@@ -49,19 +49,18 @@ public class TablePartFilter extends SyntaxFilter{
 
 			List<List<String>> tableDataList = new ArrayList<List<String>>();
 			for (int j = i; j < l; j++) {
-				if (j == tableSplitLineNum) {	// ---|---的行数，此行不能放入table的data
-					continue;
+				if (j != tableSplitLineNum) {	// 如果是---|---的行数，则此行不能放入table的data
+					String tableLine = lines.get(j);
+					if (tableLine==null || tableLine.trim().equals("")) {		//空行，表格结束
+						List<List<String>> tableDatas = trimTableData(tableDataList);
+						textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas, cellAligns).bulid()));
+						
+						i = (j - 1);
+						break;
+					}
+					String[] cellDatas = tableLine.split("\\|");
+					tableDataList.add(Arrays.asList(cellDatas));
 				}
-				String tableLine = lines.get(j);
-				if (tableLine==null || tableLine.trim().equals("")) {		//空行，表格结束
-					List<List<String>> tableDatas = trimTableData(tableDataList);
-					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas, cellAligns).bulid()));
-					
-					i = (j - 1);
-					break;
-				}
-				String[] cellDatas = tableLine.split("\\|");
-				tableDataList.add(Arrays.asList(cellDatas));
 				if (j == (l - 1)) { // 到内容底部，table数据结束，归档
 					List<List<String>> tableDatas = trimTableData(tableDataList);
 					textOrBlocks.add(new TextOrBlock(new TableBuilder(tableDatas, cellAligns).bulid()));

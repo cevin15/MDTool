@@ -14,4 +14,7 @@ public class Test {
 		System.out.println(result);
 	}
 
+	public static void main(String[] args) throws IOException {
+		new Test().test();
+	}
 }
