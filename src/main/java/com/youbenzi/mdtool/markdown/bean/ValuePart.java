@@ -1,10 +1,8 @@
 package com.youbenzi.mdtool.markdown.bean;
 
 import java.util.Arrays;
-import java.util.Map.Entry;
 
 import com.youbenzi.mdtool.markdown.BlockType;
-import com.youbenzi.mdtool.markdown.MDToken;
 import com.youbenzi.mdtool.tool.Tools;
 
 public class ValuePart{
