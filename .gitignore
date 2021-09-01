@@ -22,3 +22,6 @@ gradle.properties
 .gradle/
 .vscode/
 .idea/
+gradlew
+gradlew.bat
+gradle/
