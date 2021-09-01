@@ -84,16 +84,26 @@ public class Analyzer {
 		}
 		//2. 根据这个token检测语法是否完整
 		TextLinePiece piece = checkIfCorrectSyntax(i, mdToken, text);
-		//3. 对文本分为三块
+		//3. 对文本分为三块，1 token语法之前的字符串，2 匹配到token语法，3 token语法之后的数据
 		int firstPartEndIndex = textLength;
 		int secondPartEndIndex = 0;
+		int thirdPartBeginIndex = 0;
 		int thirdPartEndIndex = 0;
 		if(piece != null) {
 			firstPartEndIndex = piece.getBeginIndex();
 			secondPartEndIndex = piece.getEndIndex();
 			if(secondPartEndIndex < (textLength - 1)) {
+				if (piece.getPieceType() == PieceType.IMAGE) { // image的开始符是两个字符，结束符是一个字符，所以要特殊处理
+					thirdPartBeginIndex = piece.getEndIndex() + 1;
+				} else { // 其它标签的开始符跟结束符长度一致
+					thirdPartBeginIndex = piece.getEndIndex() + mdToken.length();
+				}
 				thirdPartEndIndex = textLength;
 			}
+		} else if (mdToken != null) {	//有起始语法，但不能完整匹配。第二part 无数据，只有1 跟 2
+			firstPartEndIndex = mdToken.length();
+			thirdPartBeginIndex = mdToken.length();
+			thirdPartEndIndex = textLength;
 		}
 		//4. 对这个token块之前的内容归档
 		if(firstPartEndIndex > 0) {
@@ -139,11 +149,7 @@ public class Analyzer {
 		if(thirdPartEndIndex > 0) {
 
 			String thirdPart = "";
-			if (piece.getPieceType() == PieceType.IMAGE) { // image的开始符是两个字符，结束符是一个字符，所以要特殊处理
-				thirdPart = text.substring(piece.getEndIndex() + 1);
-			} else { // 其它标签的开始符跟结束符长度一致
-				thirdPart = text.substring(piece.getEndIndex() + mdToken.length());
-			}
+			thirdPart = text.substring(thirdPartBeginIndex);
 
 			List<ValuePart> tmpList1 = text2ValuePart(thirdPart, notCheckMDTokens, currentTypes);
 			for (ValuePart valuePart : tmpList1) {

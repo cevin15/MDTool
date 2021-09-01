@@ -21,3 +21,4 @@ target/
 gradle.properties
 .gradle/
 .vscode/
+.idea/
