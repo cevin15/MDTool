@@ -24,6 +24,7 @@ public class ListFilter extends SyntaxFilter {
 		StringBuilder outerText = new StringBuilder();
 		for (int idx = 0, si = lines.size(); idx < si; idx++) {
 			String str = lines.get(idx);
+			boolean isQuote = isQuoteLine(str);
 			if (!isListLine(str)) {
 				outerText.append(str + "\n");
 				continue;
@@ -41,6 +42,10 @@ public class ListFilter extends SyntaxFilter {
 					preLineIsBlank = false;
 				} else {
 					preLineIsBlank = true;
+					if (isQuote) {
+						idx = idx1 - 1;		//外部循环开始读数据的地方
+						break;
+					}
 				}
 				if(idx1 == (si - 1)) {	//列表已无可读数据，通知外部循环不需要再继续读取数据
 					idx = idx1;
@@ -67,7 +72,10 @@ public class ListFilter extends SyntaxFilter {
 	protected boolean isListLine(String target) {
 		return MultiListBuilder.isList(target);
 	}
-	
+
+	protected boolean isQuoteLine(String target) {
+		return MultiListBuilder.isQuote(target);
+	}
 	/**
 	 * 创建对应的block
 	 * @param source 元数据
