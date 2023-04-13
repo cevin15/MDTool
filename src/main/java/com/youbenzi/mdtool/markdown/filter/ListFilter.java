@@ -3,6 +3,7 @@ package com.youbenzi.mdtool.markdown.filter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.youbenzi.mdtool.markdown.MDToken;
 import com.youbenzi.mdtool.markdown.bean.Block;
 import com.youbenzi.mdtool.markdown.bean.TextOrBlock;
 import com.youbenzi.mdtool.markdown.builder.MultiListBuilder;
@@ -40,6 +41,11 @@ public class ListFilter extends SyntaxFilter {
 					interText.append(str).append("\n");
 					preLineIsBlank = false;
 				} else {
+					//打上空行标志 $br
+					if (interText.toString().endsWith("\n")) {
+						interText.insert(interText.length() - 1, MDToken.CUSTOM_BLANK_CHAR);
+					}
+					interText.append("");
 					preLineIsBlank = true;
 				}
 				if(idx1 == (si - 1)) {	//列表已无可读数据，通知外部循环不需要再继续读取数据

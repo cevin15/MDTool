@@ -24,6 +24,7 @@ public class MDToken {
 	public static final String CODE_WORD = "`";
 	public static final String ROW = "  ";
 	public static final String TABLE_COL = "|";
+	public static final String CUSTOM_BLANK_CHAR = "@br";
 
 	public static final Map<String, String> PLACEHOLDER_MAP = new LinkedHashMap<String, String>() { // 需要显示的特殊符号的占位符
 		private static final long serialVersionUID = 5649442662460683378L;

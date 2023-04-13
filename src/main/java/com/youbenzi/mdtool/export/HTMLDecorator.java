@@ -3,6 +3,7 @@ package com.youbenzi.mdtool.export;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.youbenzi.mdtool.markdown.BlockType;
@@ -204,6 +205,8 @@ public class HTMLDecorator implements Decorator {
 			} else {
 				content = commonTextParagraph(lineBlock.getValueParts(), lineHelper.needDefaultChild());
 			}
+			//删除空行标志 @br
+			content = content.replace(MDToken.CUSTOM_BLANK_CHAR, "");
 			tmp.append(lineHelper.childTagBegin(block));
 			tmp.append(content).append("\n").append(lineHelper.subList(block));
 			tmp.append(lineHelper.childTagEnd());
@@ -214,7 +217,31 @@ public class HTMLDecorator implements Decorator {
 	}
 
 	private String quoteParagraph(List<Block> listData) {
-		return abstractListParagraph(listData, new DefaultLineHelper("blockquote"));
+		StringBuilder result = new StringBuilder();
+		List<Block> blocks = new ArrayList<>();
+
+		boolean hasBlankChar = false;
+		for (int i = 0; i < listData.size(); i ++) {
+			Block block = listData.get(i);
+			Block lineBlock = block.getLineData();
+
+			blocks.add(block);
+			//遇到空行占位符@br，代表当前引用块结束
+			if (lineBlock.getValueParts()[lineBlock.getValueParts().length - 1].getValue().endsWith(MDToken.CUSTOM_BLANK_CHAR)) {
+				hasBlankChar = true;
+				result.append(abstractListParagraph(blocks, new DefaultLineHelper("blockquote")));
+				if ((i + 1) < listData.size()) {
+					//如果有未處理的block，递归获取下一个引用块
+					listData = listData.subList(i + 1, listData.size());
+					result.append(quoteParagraph(listData));
+				}
+				break;
+			}
+		}
+		if (!hasBlankChar) {
+			result.append(abstractListParagraph(blocks, new DefaultLineHelper("blockquote")));
+		}
+		return result.toString();
 	}
 
 	private String unorderedListParagraph(List<Block> listData) {
