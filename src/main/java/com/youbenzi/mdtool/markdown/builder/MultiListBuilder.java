@@ -239,7 +239,7 @@ public class MultiListBuilder implements BlockBuilder {
 				str.trim().startsWith(MDToken.UNORDERED_LIST3);
 	}
 
-	private static boolean isQuote(String str) {
+	public static boolean isQuote(String str) {
 		return str.trim().startsWith(MDToken.QUOTE);
 	}
 	
