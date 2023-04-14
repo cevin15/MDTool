@@ -3,7 +3,6 @@ package com.youbenzi.mdtool.markdown.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.youbenzi.mdtool.markdown.MDToken;
 import com.youbenzi.mdtool.markdown.bean.Block;
 import com.youbenzi.mdtool.markdown.bean.TextOrBlock;
 import com.youbenzi.mdtool.markdown.builder.MultiListBuilder;
@@ -25,11 +24,13 @@ public class ListFilter extends SyntaxFilter {
 		StringBuilder outerText = new StringBuilder();
 		for (int idx = 0, si = lines.size(); idx < si; idx++) {
 			String str = lines.get(idx);
-			boolean isQuote = isQuoteLine(str);
 			if (!isListLine(str)) {
-				outerText.append(str + "\n");
+				if (!str.trim().equals("")) {
+					outerText.append(str + "\n");
+				}
 				continue;
 			}
+			boolean isQuote = isQuoteLine(str);
 			boolean preLineIsBlank = false;
 			StringBuilder interText = new StringBuilder(str).append("\n");
 			for (int idx1 = (idx + 1); idx1 < si; idx1++) {
@@ -42,22 +43,18 @@ public class ListFilter extends SyntaxFilter {
 					interText.append(str).append("\n");
 					preLineIsBlank = false;
 				} else {
-					//打上空行标志 $br
-					if (interText.toString().endsWith("\n")) {
-						interText.insert(interText.length() - 1, MDToken.CUSTOM_BLANK_CHAR);
-					}
-					interText.append("");
-					preLineIsBlank = true;
+					// 引用块遇到空行，结束当前引用块
 					if (isQuote) {
 						idx = idx1 - 1;		//外部循环开始读数据的地方
 						break;
 					}
+					preLineIsBlank = true;
 				}
 				if(idx1 == (si - 1)) {	//列表已无可读数据，通知外部循环不需要再继续读取数据
 					idx = idx1;
 				}
 			}
-			
+
 			if (!outerText.toString().equals("")) {
 				textOrBlocks.add(new TextOrBlock(outerText.toString()));
 				outerText = new StringBuilder();
@@ -79,9 +76,15 @@ public class ListFilter extends SyntaxFilter {
 		return MultiListBuilder.isList(target);
 	}
 
+	/**
+	 * 是否是符合规则的引用行
+	 * @param target
+	 * @return
+	 */
 	protected boolean isQuoteLine(String target) {
 		return MultiListBuilder.isQuote(target);
 	}
+
 	/**
 	 * 创建对应的block
 	 * @param source 元数据
